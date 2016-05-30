@@ -1,0 +1,55 @@
+/*
+    Document   : css/colors.css
+    Created on : 2016-04-17 09:27 PM
+    Author     : ibare-o-borrayo
+    Description:
+    Purpose of the stylesheet follows.
+    To change this template use Tools | Templates.
+*/
+.dark-primary{
+    background-color: #0097a7 !important;
+}
+
+.dark-primary-text{
+    color:#0097a7 !important;
+}
+
+.primary{
+    background-color: #00bcd4 !important;
+}
+
+.primary-text{
+    color:#00bcd4 !important;
+}
+
+.light-primary{
+    background-color: #b2ebf2 !important;
+}
+
+.light-primary-text{
+    color:#b2ebf2 !important;
+}
+
+.accent{
+    background-color: #ffc107 !important;
+}
+
+.accent-text{
+    color:#ffc107 !important;
+}
+
+.text{
+    color:#383838 !important;
+}
+
+.secondary-text{
+    color:#727272 !important;
+}
+
+.divider{
+    color:#b6b6b6 !important;
+}
+
+.divider-back{
+    background-color:#b6b6b6 !important;
+}

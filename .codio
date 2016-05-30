@@ -1,0 +1,17 @@
+{
+// Configure your Run and Preview buttons here.
+
+// Run button configuration
+  "commands": {
+	  	"Detener servicios": "parts stop apache2 mysql",
+	  	"Iniciar servicios": "parts start apache2 mysql",
+        "Reiniciar servicios": "parts restart apache2 mysql",
+	  	"Cambiar contraseña MySQL" : "mysqladmin -u root password 'root'" 
+  },
+
+// Preview button configuration
+  "preview": {
+        "Index": "http://{{domain}}:3000/",
+        "phpMyAdmin": "http://{{domain}}:3000/phpmyadmin"
+  }
+}
