@@ -23,11 +23,23 @@
 			else{
 				$data['error']=$result;
 				$this->session->set_flashdata('error-user', $data);
-				redirect(base_url().'signup');
+				redirect(base_url()/'signup');
 			}
 		}
-
-
+		
+		public function checkPasswords() {
+			$pass1 = document.getElementById("password").value;
+			$pass2 = document.getElementById("confirm_password").value;
+			$ok = true;
+			if ($pass1 != $pass2) {
+				alert("Passwords Do not match");
+				//document.getElementById("password").style.borderColor = "#E34234";
+				//document.getElementById("confirm_password").style.borderColor = "#E34234";
+				$ok = false;
+			}
+			return $ok;
+		}
+		
 
 	}
 ?>

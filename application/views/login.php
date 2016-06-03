@@ -10,9 +10,14 @@
     </div>
     
     <div class="row">
-      <form>
+      
+      <form method ="post" action="<?php echo base_url(); ?>login/receiveData" id="loginForm">
         
         <div class="col s8 offset-s2 m6 offset-m3 l4 offset-l4">
+          <?php 
+            if (isset($_SESSION['error-user']))
+              echo "Error: ".$_SESSION['error-user']['error'];
+          ?>
           <div class="input-field secondary-text">
             <input id="email" type="email" class="validate">
             <label for="email" class ="secondary-text">Email</label>
@@ -29,10 +34,10 @@
       </form>
       
       <div class="row">
-        <a href="http://localhost/stoneSteps" id="login-button" class="btn-main accent col s8 offset-s2 m6 offset-m3 l4 offset-l4">Log In</a>   
+        <input type="submit" form="loginForm" id="login-button" class="btn-main accent col s8 offset-s2 m6 offset-m3 l4 offset-l4" value="Log In">   
       </div>
       <div class="row">
-        <a href="http://localhost/stoneSteps/signup.php" id="signin-button" class="btn-main dark-primary col s8 offset-s2 m6 offset-m3 l4 offset-l4">Sign Up</a>
+        <a href="localhost/stone-steps-ci/signup" id="signin-button" class="btn-main dark-primary col s8 offset-s2 m6 offset-m3 l4 offset-l4">Sign Up</a>
       </div>
     </div>
   </div> <!-- container -->

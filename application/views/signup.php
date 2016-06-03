@@ -19,7 +19,7 @@
     
     <div class="row">
       <!-- Empieza Segunda Columna -->
-      <form  method="post" enctype="multipart/form-data" action="<?php echo base_url(); ?>signup/receiveData" class="col s12 m6 push-m5 l5 push-l5" id="signupForm">
+      <form  method="post" enctype="multipart/form-data" onsubmit="return checkPasswords()" action="<?php echo base_url(); ?>signup/receiveData" class="col s12 m6 push-m5 l5 push-l5" id="signupForm">
         
         <div class= "row">
           <div class="input-field secondary-text col s6">
@@ -54,29 +54,23 @@
           </div>
       
           <div class="input-field secondary-text col s6">
-            <input name="confirm_password" id="password" type="password" class="validate">
+            <input name="confirm_password" id="confirm_password" type="password" class="validate">
             <label for="password" class ="secondary-text">Confirm Password</label>
           </div>
         </div>
-
-        <!-- Empieza Primera Columna -->
-      <!-- Termina Primera Columna -->
-
-
       </form>
       <!-- Termina Segunda Columna -->
   
+      <!-- Empieza Primera Columna -->
       <div class="col s12 center m5 pull-m6 l4 pull-l4">
         <div class="row">
-          <a href="">
-            <img  class="user" id="imagen_m"  src="http://placehold.it/540/eeeeee">
-          </a>
+          <img  class="user" id="imagen_m" src="images/avatar.png">
         </div>
         <div class="row col s8 offset-s2 m12">
           <div class="file-field input-field">
             <div class="btn waves-effect dark-primary waves-light">
               <span><i class="material-icons ">perm_media add</i></span>
-              <input form="signupForm" name="picture" type="file">
+              <input type="file" form="signupForm" name="picture" onchange="document.getElementById('imagen_m').src = window.URL.createObjectURL(this.files[0])">
             </div>
             <div class="file-path-wrapper">
               <input class="file-path validate" type="text" placeholder="Upload Goal Photo">
@@ -84,6 +78,7 @@
           </div>
         </div> 
       </div>  
+      <!-- Termina Primera Columna -->
 
 
     </div> <!-- Row de Formulario/Foto -->
@@ -97,7 +92,7 @@
     
     <div class="row">
       <div class="col center s12">
-        <a href="http://localhost/stoneSteps/login.php" id="cancel-button" class="btn-main divider-back">
+        <a href="http://localhost/stone-steps-ci/" id="cancel-button" class="btn-main divider-back">
           Cancel
         </a>
       </div>
