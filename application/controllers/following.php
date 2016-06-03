@@ -5,6 +5,7 @@
 
 		public function index() {
 			$data['content']='following';
+			$data['following']=$this->model->getFollowing();
 			$this->load->view('structure/template',$data);
 		}
 	}

@@ -81,13 +81,13 @@
 		}
 
 		function getFollowing() {
-			$this->db->select('users.user_id as id,users.first_name as firstName,users.last_name as lastName,users.picture as picture');
+			$this->db->select('users.user_id as id,users.first_name as firstName,users.last_name as lastName, users.middle_name as middleName, users.picture as picture');
             $this->db->from('following');
-            $this->db->join('users','users.id=following.user_following_id');
+            $this->db->join('users','users.user_id=following.user_following_id');
             $usersResults = $this->db->where(array('following.user_id'=>$_SESSION['user']['id']))->get()->result();
             for($i=0; sizeof($usersResults)>0 && $i<sizeof($usersResults) ;$i++){
                 $users[$i]['id']= $usersResults[$i]->id;
-                $users[$i]['name']= $usersResults[$i]->firstname.' '.$user[$i]->lastname;
+                $users[$i]['name']= $usersResults[$i]->firstName.' '.$usersResults[$i]->middleName.' '.$usersResults[$i]->lastName;
                 $users[$i]['completedGoals']= $this->getCompletedGoals($usersResults[$i]->id);
                 $users[$i]['picture']= $usersResults[$i]->picture;
             }
