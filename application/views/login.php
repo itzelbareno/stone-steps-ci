@@ -37,7 +37,7 @@
         <input type="submit" form="loginForm" id="login-button" class="btn-main accent col s8 offset-s2 m6 offset-m3 l4 offset-l4" value="Log In">   
       </div>
       <div class="row">
-        <a href="localhost/stone-steps-ci/signup" id="signin-button" class="btn-main dark-primary col s8 offset-s2 m6 offset-m3 l4 offset-l4">Sign Up</a>
+        <a href="<?php echo base_url(); ?>signup" id="signin-button" class="btn-main dark-primary col s8 offset-s2 m6 offset-m3 l4 offset-l4">Sign Up</a>
       </div>
     </div>
   </div> <!-- container -->
