@@ -7,28 +7,41 @@
 
 		//LOGIN, SIGNUP, HEADER
 
+		//Devuelve True si el usuario fue dado de alta exitosamente.
+		//Devuelve el error si no se pudo dar de alta al usuario.
+		//userData['first_name']
+		//userData['last_name']
+		//userData['middle_name']
+		//userData['password']
+		//userData['email']
+		//userData['picture']
 		function signUp($userData) {
-			//userData['first_name']
-			//userData['last_name']
-			//userData['middle_name']
-			//userData['password']
-			//userData['email']
-			//userData['picture']
 			if($this->db->where(array('email'=>$userData['email']))->get('users')->num_rows()==0){
-            	$userData['password'] = sha1($userData['password']);
-            	$userData['picture'] = "";
-                $this->db->insert('users',$userData);
-                //$userPicture = $this->uploadUserPicture($userData['file']);
-                //$userData['picture'] = $userPicture;
-                //$this->db->where(array())->update('users',$userData);
-                $this->logIn($userData['email'],$userData['password']);
-                return true;
+				$userData['picture'] = $this->uploadUserPicture($userData['picture']);
+				if($userData['picture'] != false){
+					$id = $this->db->select_max('user_id')->get('users')->row()->user_id;
+					$id++;
+					$userData['user_id'] = $id;
+	            	$userData['password'] = sha1($userData['password']);
+	            	if($this->db->insert('users',$userData)){
+	                	if($this->logIn($userData['email'],$userData['password'])){
+	                		return true;
+	                	}
+	                	else
+	                		return "Your account was created successfully but you couldn't be logged in at the moment. Please try again later.";
+                	}
+                	else
+                		return "Your signup process couldn't be accomplished, please try again later.";
+            	}
+            	else
+            		return "Your picture couldn't be uploaded, please try again at another time.";
             }
-            return false;
+            else
+            	return 'That email account is already in use. Please try another one or log into that account.';
 		}
 
 		function logIn($user, $password) {
-			$where=array('email'=>$email,'password'=>$password);
+			$where=array('email'=>$user,'password'=>$password);
             $userResults = $this->db->where($where)->get('users');
 			if($userResults->num_rows()>0){
                 $user=$userResults->row();
@@ -41,8 +54,9 @@
 				$this->setUser($data);
 				return true;
 			}
-			else
+			else{
 				return false;
+			}
 		}
 
 		function logOut() {
@@ -97,9 +111,10 @@
 		}
 
 		function uploadUserPicture($file){
+			$id = $this->db->select_max('user_id')->get('users')->row()->user_id;
+			$id++;
+
 			$dir="./images/users/";            
-            
-            $id=$_SESSION['user']['id'];
 			$type = explode('/',$file['type']);
 			$type = $type[1];
 			if($type == 'jpeg')
@@ -110,21 +125,42 @@
 			$config['file_name']=$name;
 			$this->load->library('upload',$config);
             $this->upload->initialize($config);
-			if(!$this->upload->do_upload('file'))
+			if(!$this->upload->do_upload('picture')){
+				echo $this->upload->display_errors();
 				return false;
+			}
 			else{
+				list($width, $height) = getimagesize($dir.''.$name);
+				$config['source_image']=$dir.''.$name;
+				$config['maintain_ratio']=FALSE;
+				if($width>$height){
+    				$config['width'] = $height;
+    				$config['height'] = $height;
+    				$config['x_axis'] = (($width / 2) - ($config['width'] / 2));
+				}
+				else{
+					$config['height'] = $width;
+    				$config['width'] = $width;
+   					$config['y_axis'] = (($height / 2) - ($config['height'] / 2));
+				}
+
+				$this->load->library('image_lib',$config);
+				$this->image_lib->initialize($config);
+				$this->image_lib->crop();
+
 				$config['source_image']=$dir.''.$name;
 				$config['maintain_ratio']=TRUE;
 				$config['width'] = 300;
 				$config['height'] = 300;
 				$config['master_dim']='width';
-				$this->load->library('image_lib',$config);
-				$this->image_lib->resize();
-				$config['x_axis']=0;
-				$config['y_axis']=0;
-				$config['maintain_ratio']=FALSE;
+				$this->image_lib->clear();
 				$this->image_lib->initialize($config);
-				$this->image_lib->crop();                
+				$this->image_lib->resize();
+				
+				/*$config['x_axis']=0;
+				$config['y_axis']=0;
+				$config['maintain_ratio']=FALSE;*/
+				                
                 
                 return $name;                                
 			}

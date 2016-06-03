@@ -9,10 +9,17 @@
       <h5 class="header col s12 secondary-text">Don't mistake activity with achievement.</h5>
       <h6 class="header col s12 secondary-text light">John Wooden</h6>
     </div>
+
+    <div class="row center">
+      <?php 
+        if (isset($_SESSION['error-user']))
+          echo "Error: ".$_SESSION['error-user']['error']; 
+      ?>
+    </div>
     
     <div class="row">
       <!-- Empieza Segunda Columna -->
-      <form  method="post" action="<?php echo base_url(); ?>/signup/receiveData" class="col s12 m6 push-m5 l5 push-l5" id="signupForm">
+      <form  method="post" enctype="multipart/form-data" action="<?php echo base_url(); ?>signup/receiveData" class="col s12 m6 push-m5 l5 push-l5" id="signupForm">
         
         <div class= "row">
           <div class="input-field secondary-text col s6">
@@ -69,7 +76,7 @@
           <div class="file-field input-field">
             <div class="btn waves-effect dark-primary waves-light">
               <span><i class="material-icons ">perm_media add</i></span>
-              <input form="signupForm" name="file" type="file">
+              <input form="signupForm" name="picture" type="file">
             </div>
             <div class="file-path-wrapper">
               <input class="file-path validate" type="text" placeholder="Upload Goal Photo">

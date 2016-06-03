@@ -9,14 +9,25 @@
 		}
 
 		public function receiveData(){
-			$data['first_name'] = $_POST['first_name'];
-			$data['middle_name'] = $_POST['middle_name'];
-			$data['last_name'] = $_POST['last_name'];
-			$data['email'] = $_POST['email'];
-			$data['password'] = $_POST['password'];
-			$data['picture'] = $_POST['file'];
-			$this->model->signUp($data);
-			redirect(base_url());
+			$data['user']['first_name'] = $_POST['first_name'];
+			$data['user']['middle_name'] = $_POST['middle_name'];
+			$data['user']['last_name'] = $_POST['last_name'];
+			$data['user']['email'] = $_POST['email'];
+			$data['user']['password'] = $_POST['password'];
+			$data['user']['picture'] = $_FILES['picture'];
+
+			$result = $this->model->signUp($data['user']);
+			if($result === true){
+				redirect(base_url());
+			}
+			else{
+				$data['error']=$result;
+				$this->session->set_flashdata('error-user', $data);
+				redirect(base_url().'signup');
+			}
 		}
+
+
+
 	}
 ?>
