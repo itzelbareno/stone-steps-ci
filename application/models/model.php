@@ -8,15 +8,21 @@
 		//LOGIN, SIGNUP, HEADER
 
 		function signUp($userData) {
+			//userData['first_name']
+			//userData['last_name']
+			//userData['middle_name']
+			//userData['password']
+			//userData['email']
+			//userData['picture']
 			if($this->db->where(array('email'=>$userData['email']))->get('users')->num_rows()==0){
-                $userPicture = $this->uploadUserPicture($userData['file']);
-                if($userPicture!=false){
-                	$userData['password'] = sha1($userData['password']);
-                	$userData['picture'] = $userPicture;
-	                $this->db->insert('users',$userData);
-	                $this->logIn($data['email'],$data['password']);
-	                return true;
-                }
+            	$userData['password'] = sha1($userData['password']);
+            	$userData['picture'] = "";
+                $this->db->insert('users',$userData);
+                //$userPicture = $this->uploadUserPicture($userData['file']);
+                //$userData['picture'] = $userPicture;
+                //$this->db->where(array())->update('users',$userData);
+                $this->logIn($userData['email'],$userData['password']);
+                return true;
             }
             return false;
 		}
@@ -149,7 +155,7 @@
 				$data[$i]['title']=$goals[$i]->title;
 				$data[$i]['description']=$goals[$i]->description;
 				$data[$i]['userId']=$goals[$i]->user_id;
-				$data[$i][$i]['goalTypeId']=$goals[$i]->goal_type_id;
+				$data[$i]['goalTypeId']=$goals[$i]->goal_type_id;
 				$data[$i]['statusId']=$goals[$i]->status_id;
 				$data[$i]['creationDate']=$goals[$i]->creation_date;
 				$data[$i]['startDate']=$goals[$i]->start_date;

@@ -25,8 +25,8 @@
 			<form  action="#" class="col s8 offset-s2 m6 offset-m3 l4 offset-l4">
 				<div class= "row">
 					<div class="input-field secondary-text col s12">
-						<input id="goal_title" type="text" class="validate">
-						<label for="goal_title" class ="dark-primary-text">Goal  Title</label>
+						<input id="goal_title" type="text" class="validate" value="<?php if ($goal!=false) echo $goal['title'];?>">
+						<label for="goal_title" class ="dark-primary-text"> Goal Title</label>
 					</div>
 					<div class="input-field secondary-text col s12">
 						<textarea id="goal_description" class="materialize-textarea"></textarea>

@@ -12,49 +12,53 @@
     
     <div class="row">
       <!-- Empieza Segunda Columna -->
-      <form  action="#" class="col s12 m6 push-m5 l5 push-l5">
+      <form  method="post" action="<?php echo base_url(); ?>/signup/receiveData" class="col s12 m6 push-m5 l5 push-l5" id="signupForm">
         
         <div class= "row">
           <div class="input-field secondary-text col s6">
-            <input id="first_name" type="text" class="validate">
+            <input name="first_name" id="first_name" type="text" class="validate" >
             <label for="first_name" class ="secondary-text">First Name</label>
           </div>
         
           <div class="input-field secondary-text col s6">
-            <input id="middle_name" type="text" class="validate">
+            <input name="middle_name" id="middle_name" type="text" class="validate">
             <label for="middle_name" class ="secondary-text">Middle Name</label>
           </div>
         </div>
     
         <div class= "row"> 
           <div class="input-field secondary-text">
-            <input id="last_name" type="text" class="validate">
+            <input name="last_name" id="last_name" type="text" class="validate">
             <label for="last_name" class ="secondary-text">Last Name</label>
           </div>
         </div>
       
         <div class="row">
           <div class="input-field secondary-text">
-            <input id="email" type="email" class="validate">
+            <input name="email" id="email" type="email" class="validate">
             <label for="email" class ="secondary-text">Email</label>
           </div>
         </div>
       
         <div class="row ">
           <div class="input-field secondary-text col s6">
-            <input id="password" type="password" class="validate">
+            <input name="password" id="password" type="password" class="validate">
             <label for="password" class ="secondary-text">Password</label>
           </div>
       
           <div class="input-field secondary-text col s6">
-            <input id="password" type="password" class="validate">
+            <input name="confirm_password" id="password" type="password" class="validate">
             <label for="password" class ="secondary-text">Confirm Password</label>
           </div>
-        </div>         
+        </div>
+
+        <!-- Empieza Primera Columna -->
+      <!-- Termina Primera Columna -->
+
+
       </form>
       <!-- Termina Segunda Columna -->
-    
-      <!-- Empieza Primera Columna -->
+  
       <div class="col s12 center m5 pull-m6 l4 pull-l4">
         <div class="row">
           <a href="">
@@ -63,25 +67,24 @@
         </div>
         <div class="row col s8 offset-s2 m12">
           <div class="file-field input-field">
-						<div class="btn waves-effect dark-primary waves-light">
-							<span><i class="material-icons ">perm_media add</i></span>
-							<input type="file">
-						</div>
-						<div class="file-path-wrapper">
-							<input class="file-path validate" type="text" placeholder="Upload Goal Photo">
-						</div>
-					</div>
+            <div class="btn waves-effect dark-primary waves-light">
+              <span><i class="material-icons ">perm_media add</i></span>
+              <input form="signupForm" name="file" type="file">
+            </div>
+            <div class="file-path-wrapper">
+              <input class="file-path validate" type="text" placeholder="Upload Goal Photo">
+            </div>
+          </div>
         </div> 
       </div>  
-      <!-- Termina Primera Columna -->
+
+
     </div> <!-- Row de Formulario/Foto -->
     
     <!-- Botones SignUp / Cancel --> 
     <div class="row">
       <div class="col center s12">
-        <a href="http://localhost/stoneSteps" id="signin-button" class="btn-main accent">
-          Sign Up
-        </a>
+        <input type="submit" form="signupForm" id="signin-button" class="btn-main accent" value="Sign Up">
        </div>
     </div>
     

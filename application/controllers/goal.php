@@ -17,6 +17,7 @@
 
 		function update_goal($goalId) {
 			$data['content']='updateGoal1';
+			//$data['goal'] = $this->model->getGoal($goalId);
 			$this->load->view('structure/template',$data);
 		}
 

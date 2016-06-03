@@ -13,7 +13,7 @@
 
     </head>
 
-	<body <?php //if($content == 'login') echo 'class="login"'; else if($content == 'signup') echo 'class="signup"'; ?>>
+	<body>
     
     <?php if($content != 'login' && $content != 'signup'): ?>
         <div class="navbar-fixed z-depth-1">
@@ -60,4 +60,3 @@
         </nav>
     </div>
     <?php endif; ?>
-
