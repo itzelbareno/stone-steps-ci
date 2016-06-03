@@ -12,7 +12,7 @@
 			$data['email'] = $_POST['email'];
 			$data['password'] = $_POST['password'];
 			
-			$result = $this->model->logIn($data['user']);
+			$result = $this->model->logIn($data['email'],sha1($data['password']));
 			
 			if($result === true){
 				redirect(base_url());

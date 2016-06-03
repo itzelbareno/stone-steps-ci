@@ -19,14 +19,14 @@
               echo "Error: ".$_SESSION['error-user']['error'];
           ?>
           <div class="input-field secondary-text">
-            <input id="email" type="email" class="validate">
+            <input name="email" type="email" class="validate">
             <label for="email" class ="secondary-text">Email</label>
           </div>
         </div>
         
         <div class="row col s8 offset-s2 m6 offset-m3 l4 offset-l4">
           <div class="input-field secondary-text">
-            <input id="password" type="password" class="validate">
+            <input name="password" type="password" class="validate">
             <label for="password" class ="secondary-text">Password</label>
           </div>
         </div>

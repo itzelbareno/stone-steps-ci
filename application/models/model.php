@@ -45,17 +45,17 @@
             $userResults = $this->db->where($where)->get('users');
 			if($userResults->num_rows()>0){
                 $user=$userResults->row();
-                $data['id']= $user->id;
-				$data['firstName']= $user->firstName;
-                $data['middleName']= $user->middleName;
-				$data['lastName']= $user->lastName;
+                $data['id']= $user->user_id;
+				$data['firstName']= $user->first_name;
+                $data['middleName']= $user->middle_name;
+				$data['lastName']= $user->last_name;
 				$data['email']= $user->email;
 				$data['picture']= $user->picture;
 				$this->setUser($data);
 				return true;
 			}
 			else{
-				return false;
+				return "Wrong Email or Password, please try again.";
 			}
 		}
 
