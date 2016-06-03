@@ -19,7 +19,7 @@
               echo "Error: ".$_SESSION['error-user']['error'];
           ?>
           <div class="input-field secondary-text">
-            <input name="emai" type="email" class="validate" value="<?php if(isset($_SESSION['error-user'])) echo $_SESSION['error-user']['email']; ?>" required>
+            <input name="email" type="email" class="validate" value="<?php if(isset($_SESSION['error-user'])) echo $_SESSION['error-user']['email']; ?>" required>
             <label for="email" class ="secondary-text">Email</label>
           </div>
         </div>
