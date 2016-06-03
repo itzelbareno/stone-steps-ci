@@ -14,8 +14,8 @@
 			$data['user']['last_name'] = $_POST['last_name'];
 			$data['user']['email'] = $_POST['email'];
 			$data['user']['password'] = $_POST['password'];
-			if(!isset($_FILES['picture'])){
-				$data['user']['picture'] = '';
+			if($_FILES['picture']['name'] == ""){
+				$data['user']['picture'] = "";
 			}
 			else{
 				$data['user']['picture'] = $_FILES['picture'];	
@@ -28,7 +28,7 @@
 			else{
 				$data['error']=$result;
 				$this->session->set_flashdata('error-user', $data);
-				redirect(base_url()/'signup');
+				redirect(base_url().'signup');
 			}
 		}
 		

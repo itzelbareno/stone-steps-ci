@@ -17,7 +17,7 @@
 		//userData['picture']
 		function signUp($userData) {
 			if($this->db->where(array('email'=>$userData['email']))->get('users')->num_rows()==0){
-				if($userData['picture'] == ''){
+				if($userData['picture'] == ""){
 					$userData['picture'] = 'avatar.png';
 				}
 				else{
@@ -276,7 +276,7 @@
 				$data[$i]['statusId']=$milestones[$i]->status_id;
 				$data[$i]['completedDate']=$milestones[$i]->completedDate;
             }
-            if(sizeof($data)>0){
+            if(sizeof($milestones)>0){
             	return $data;
             }
             else{
@@ -289,10 +289,10 @@
 			for($i=0; sizeof($pictures)>0 && $i<sizeof($pictures) ;$i++){
 				$data[$i]['id']=$pictures[$i]->picture_id;
 				$data[$i]['goalId']=$pictures[$i]->goal_id;
-				$data[$i]['name']=$pictures[$i]->picture_name;
-				$data[$i]['caption']=$pictures[$i]->picture_caption;
+				$data[$i]['name']=$pictures[$i]->name;
+				$data[$i]['caption']=$pictures[$i]->caption;
             }
-            if(sizeof($data)>0){
+            if(sizeof($pictures)>0){
             	return $data;
             }
             else{
