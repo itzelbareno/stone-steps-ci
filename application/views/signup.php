@@ -23,7 +23,7 @@
         
         <div class= "row">
           <div class="input-field secondary-text col s6">
-            <input name="first_name" id="first_name" type="text" class="validate" >
+            <input name="first_name" id="first_name" type="text" class="validate" required>
             <label for="first_name" class ="secondary-text">First Name</label>
           </div>
         
@@ -35,26 +35,26 @@
     
         <div class= "row"> 
           <div class="input-field secondary-text">
-            <input name="last_name" id="last_name" type="text" class="validate">
+            <input name="last_name" id="last_name" type="text" class="validate" required>
             <label for="last_name" class ="secondary-text">Last Name</label>
           </div>
         </div>
       
         <div class="row">
           <div class="input-field secondary-text">
-            <input name="email" id="email" type="email" class="validate">
+            <input name="email" id="email" type="email" class="validate" required>
             <label for="email" class ="secondary-text">Email</label>
           </div>
         </div>
       
         <div class="row ">
           <div class="input-field secondary-text col s6">
-            <input name="password" id="password" type="password" class="validate">
+            <input name="password" id="password" type="password" class="validate" required>
             <label for="password" class ="secondary-text">Password</label>
           </div>
       
           <div class="input-field secondary-text col s6">
-            <input name="confirm_password" id="confirm_password" type="password" class="validate">
+            <input name="confirm_password" id="confirm_password" type="password" class="validate" required>
             <label for="password" class ="secondary-text">Confirm Password</label>
           </div>
         </div>
@@ -64,7 +64,7 @@
       <!-- Empieza Primera Columna -->
       <div class="col s12 center m5 pull-m6 l4 pull-l4">
         <div class="row">
-          <img  class="user" id="imagen_m" src="images/avatar.png">
+          <img  class="user" id="imagen_m" src="images/users/avatar.png">
         </div>
         <div class="row col s8 offset-s2 m12">
           <div class="file-field input-field">
@@ -92,7 +92,7 @@
     
     <div class="row">
       <div class="col center s12">
-        <a href="http://localhost/stone-steps-ci/" id="cancel-button" class="btn-main divider-back">
+        <a href="<?php echo base_url(); ?>" id="cancel-button" class="btn-main divider-back">
           Cancel
         </a>
       </div>
