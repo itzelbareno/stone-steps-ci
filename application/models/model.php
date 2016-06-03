@@ -17,7 +17,13 @@
 		//userData['picture']
 		function signUp($userData) {
 			if($this->db->where(array('email'=>$userData['email']))->get('users')->num_rows()==0){
-				$userData['picture'] = $this->uploadUserPicture($userData['picture']);
+				if($userData['picture'] == ''){
+					$userData['picture'] = 'avatar.png';
+				}
+				else{
+					$userData['picture'] = $this->uploadUserPicture($userData['picture']);
+				}
+				
 				if($userData['picture'] != false){
 					$id = $this->db->select_max('user_id')->get('users')->row()->user_id;
 					$id++;

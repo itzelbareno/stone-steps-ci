@@ -14,7 +14,12 @@
 			$data['user']['last_name'] = $_POST['last_name'];
 			$data['user']['email'] = $_POST['email'];
 			$data['user']['password'] = $_POST['password'];
-			$data['user']['picture'] = $_FILES['picture'];
+			if(!isset($_FILES['picture'])){
+				$data['user']['picture'] = '';
+			}
+			else{
+				$data['user']['picture'] = $_FILES['picture'];	
+			}			
 
 			$result = $this->model->signUp($data['user']);
 			if($result === true){
