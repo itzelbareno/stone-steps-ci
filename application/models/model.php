@@ -370,7 +370,7 @@
 		}
 
 		function uploadGoalPicture($picture, $goalId){
-			$subId = sizeof($this->db->where('goal_id'=>$goalId)->get('goals_pictures'));
+			$subId = sizeof($this->db->where(array('goal_id'=>$goalId))->get('goals_pictures')->result());
 			$dir="./images/goals/";            
 			$type = explode('/',$file['type']);
 			$type = $type[1];
