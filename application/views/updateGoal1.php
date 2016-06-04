@@ -10,9 +10,9 @@
 				<div class="col s12 center">
 					<nav>
 						<div class="nav-wrapper accent ">
-							<a href="goalsABC1.php" class="breadcrumb  white-text "><b>Details</b></a>
-							<a href="goalsABC2.php" class="breadcrumb  grey-text text-lighten-3 ">Milestones</a>
-							<a href="goalsABC3.php" class="breadcrumb  grey-text text-lighten-3">Photos</a>
+							<a href="index" class="breadcrumb  white-text "><b>Details</b></a>
+							<a href="update_milestones" class="breadcrumb  grey-text text-lighten-3 ">Milestones</a>
+							<a href="update_photos" class="breadcrumb  grey-text text-lighten-3">Photos</a>
 						</div>
 					</nav>
 				</div>
@@ -22,54 +22,82 @@
       
 		<div class="row">
 		
-			<form  action="#" class="col s8 offset-s2 m6 offset-m3 l4 offset-l4">
+			<form  id="form1" method="post" class="col s8 offset-s2 m6 offset-m3 l4 offset-l4" action="
+			<?php echo base_url(); if(isset($goal)) echo "goal/update_goal";else echo "goal/receiveDataNewGoal";?>" enctype="multipart/form-data">
+				<div class="row center">
+					<?php 
+						if (isset($_SESSION['error-goal']))
+							echo "Error: ".$_SESSION['error-goal']['error']; 
+					?>
+				</div>
 				<div class= "row">
 					<div class="input-field secondary-text col s12">
-						<input id="goal_title" type="text" class="validate" value="<?php if ($goal!=false) echo $goal['title'];?>">
+						<input name="goal_title" type="text" class="validate" value="<?php if (isset($goal)) echo $goal['title'];?>">
 						<label for="goal_title" class ="dark-primary-text"> Goal Title</label>
 					</div>
 					<div class="input-field secondary-text col s12">
-						<textarea id="goal_description" class="materialize-textarea"></textarea>
+						<textarea name="goal_description" class="materialize-textarea"><?php if (isset($goal)) echo $goal['description'];?></textarea>
 						<label for="goal_description" class= "dark-primary-text">Goal Description</label>
 					</div>
 		  
 					<div class="input-field col s12 secondary-text">
-						<select class="icons">
-							<option value="" disabled selected>Choose a Category</option>
-							<option value="1" data-icon="<?php echo base_url(); ?>images/sports.png" class="left circle">Sports</option>
-							<option value="2" data-icon="<?php echo base_url(); ?>images/knowledge.png" class="left circle">Knowledge</option>
-							<option value="3" data-icon="<?php echo base_url(); ?>images/arts.png" class="left circle">Arts</option>
-							<option value="4" data-icon="<?php echo base_url(); ?>images/professional.png" class="left circle">Professional</option>
-							<option value="5" data-icon="<?php echo base_url(); ?>images/social.png" class="left circle">Social</option>
-							<option value="6" data-icon="<?php echo base_url(); ?>images/personal.png" class="left circle">Personal</option>
+						<select class="icons" name="goal_type_id">
+							<option value="" disabled <?php if (!isset($goal)) echo "selected";?>>Choose a Category</option>
+							<option value="1" <?php if (isset($goal)&&$goal['goalTypeId']==1) echo "selected";?> data-icon="<?php echo base_url(); ?>images/arts.png" class="left circle">Arts</option>
+							<option value="2" <?php if (isset($goal)&&$goal['goalTypeId']==2) echo "selected";?> data-icon="<?php echo base_url(); ?>images/knowledge.png" class="left circle">Knowledge</option>
+							<option value="3" <?php if (isset($goal)&&$goal['goalTypeId']==3) echo "selected";?> data-icon="<?php echo base_url(); ?>images/social.png" class="left circle">Social</option>
+							<option value="4" <?php if (isset($goal)&&$goal['goalTypeId']==4) echo "selected";?> data-icon="<?php echo base_url(); ?>images/sports.png" class="left circle">Sports</option>
+							<option value="5" <?php if (isset($goal)&&$goal['goalTypeId']==5) echo "selected";?> data-icon="<?php echo base_url(); ?>images/professional.png" class="left circle">Professional</option>
+							<option value="6" <?php if (isset($goal)&&$goal['goalTypeId']==6) echo "selected";?> data-icon="<?php echo base_url(); ?>images/personal.png" class="left circle">Personal</option>
 						</select>
-						<label>Goal Type</label>
+						<label class="dark-primary-text">Goal Type</label>
 					</div>
-  
+					<?php $this->load->helper('date');?>
 					<div id="date-picker" class="section scrollspy secondary-text col s12">
 						<label for="goal_startDate" class ="dark-primary-text">Start Date</label>
-						<input data-value="yyyy/mm/dd" type="date" class="datepicker" id="goal_startDate">
+						<input name="start_date" value="<?php if(isset($goal)) echo  date("d-M-Y",strtotime($goal['startDate']));else "yyyy/mm/dd"; ?>" type="date" class="datepicker" id="goal_startDate">
+						
 					</div>
 			  
 					<div id="date-picker" class="section scrollspy secondary-text col s12">
-						<label for="goal_endDate" class ="dark-primary-text">End Date</label>
-						<input data-value="yyyy/mm/dd" type="date" class="datepicker" id="goal_endDate">
+						<label for="goal_endDate" class ="dark-primary-text">Deadline</label>
+						<input name="finishing_date" value="<?php if(isset($goal)) echo  date("d-M-Y",strtotime($goal['finishingDate']));else "yyyy/mm/dd"; ?>" type="date" class="datepicker" id="goal_endDate">
 					</div>
 				</div>
-				<div class="row col s12 center">
-					<input type="checkbox" id="public_checkbox" />
-					<label for="public_checkbox">Public</label>
+				<div class="row ">
+					<div class="col s6 ">
+						<input name="is_completed" type="checkbox" id="is_completed" <?php if (isset($goal)&&$goal['statusId']==3) echo "checked"; else echo "unchecked";?> />
+						<label for="is_completed">Completed</label>
+					</div>
+					<div class="col s6 ">
+						<input name="is_public" type="checkbox" id="is_public" <?php if (isset($goal)&&$goal['isPublic']==1) echo "checked"; else echo "unchecked";?> />
+						<label for="is_public">Public</label>
+					</div>
+					
 				</div>
+				
+				<div class="row ">
+					<div class="col s12 ">
+						<div id="date-picker" class="section scrollspy secondary-text">
+							<label for="completed_date" class ="dark-primary-text">Completed Date</label>
+							<input name="completed_date" value="<?php if(isset($goal)&&$goal['statusId']==3) echo  date("d-M-Y",strtotime($goal['completedDate']));else "yyyy/mm/dd"; ?>" type="date" class="datepicker " id="goal_endDate">
+						</div>
+					</div>
+				</div>
+				
+				
 				
 				
       
 			</form>
-			<div class="row">
-					<a href="goalsABC2.php" id="next-button" class="btn-main primary-dark waves-effect waves-light offset-s3 offset-m3 offset-l3 col s6 m6 l6 ">Next Step</a>
+				
+				<div class="row">
+					<input type="submit" form="form1" id="create-button" class="btn-main accent waves-effect waves-light offset-s3 offset-m3 offset-l3 col s6 m6 l6 " value="Save Goal" />
 				</div>
 				<div class="row">
-					<a href="index.php" id="create-button" class="btn-main accent waves-effect waves-light offset-s3 offset-m3 offset-l3 col s6 m6 l6 ">Save Goal</a>
+					<a href="<?php echo base_url();?>goal/update_milestones/1" form="form1" id="next-button" class="btn-main primary-dark waves-effect waves-light offset-s3 offset-m3 offset-l3 col s6 m6 l6 ">Next Step</a>
 				</div>
-		</div>
+				</div>
+			
     </div>
 </div>

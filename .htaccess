@@ -2,3 +2,4 @@ RewriteEngine on
 RewriteCond $1 !^(index\.php|images|js|css|font|fonts|robots\.txt)
 RewriteRule ^(.*)$ index.php?/$1 [L]
 php_value upload_max_filesize 40M
+php_value date.timezone 'America/Los_Angeles'

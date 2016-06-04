@@ -321,45 +321,98 @@
 		//ADD, UPDATE, DELETE GOAL
 
 		function addGoal($data){
-			if($this->db->insert('goals',$data))
-				return $this->db->insert_id();
+			if($this->db->insert('goals',$data)) {
+				$newGoalId = $this->db->insert_id();
+				$newsFeed['news_type_id'] = 0;
+				$newsFeed['user_id'] = $_SESSION['user']['id'];
+				$newsFeed['object_id'] = $newGoalId;
+				$this->load->helper('date');
+				$newsFeed['created_date'] = mdate("%Y-%m-%d",time());
+				$this->addNewsFeed($newsFeed);
+				return $newGoalId;
+			}
 			else
 				return false;
 			//Add to news feed
 		}
 
 		function updateGoal($data, $goalId){
-			$this->db->where(array('goal_id'=>$goalId))->update('goals',$data);
-			return true;
+			$oldGoal = $this->getGoal($goalId);
+			if($this->db->where(array('goal_id'=>$goalId))->update('goals',$data)){
+				if($data['status_id'] != $oldGoal['statusId']){
+					$newsFeed['news_type_id'] = 2;
+					$newsFeed['user_id'] = $_SESSION['user']['id'];
+					$newsFeed['object_id'] = $goalId;
+					$this->load->helper('date');
+					$newsFeed['created_date'] = mdate("%Y-%m-%d",time());
+					$this->addNewsFeed($newsFeed);
+				}
+				return true;
+			}
 			//Add to news feed if status was updated
 		}
 
 		function deleteGoal($goalId){
-			//Baja logica.
+			$data['status_id'] = 0;
+			$this->db->where(array('goal_id'=>$goalId))->update('goals',$data);
 			return true;
+			//eliminar news feed
 		}
 
 		function addMilestone($data){
-			$this->db->insert('milestones',$data);
-			return true;
-			//Add to news feed
+			if($this->db->insert('milestones',$data)) {
+				$newMilestoneId = $this->db->insert_id();
+				$newsFeed['news_type_id'] = 1;
+				$newsFeed['user_id'] = $_SESSION['user']['id'];
+				$newsFeed['object_id'] = $newMilestoneId;
+				$this->load->helper('date');
+				$newsFeed['created_date'] = mdate("%Y-%m-%d",time());
+				$this->addNewsFeed($newsFeed);
+				return $newMilestoneId;
+			}
+			else
+				return false;
 		}
 
-		function updateMilestone($data, $milestoneId){
-			$this->db->where(array('milestone_id'=>$milestoneId))->update('milestones',$data);
-			return true;
+		function updateMilestone($data, $milestoneId){			
+			$oldMilestone = $this->getMilestone($milestoneId);
+			if($this->db->where(array('milestone_id'=>$milestoneId))->update('milestones',$data);){
+				if($data['status_id'] != $oldMilestone['statusId']){
+					$newsFeed['news_type_id'] = 3;
+					$newsFeed['user_id'] = $_SESSION['user']['id'];
+					$newsFeed['object_id'] = $milestoneId;
+					$this->load->helper('date');
+					$newsFeed['created_date'] = mdate("%Y-%m-%d",time());
+					$this->addNewsFeed($newsFeed);
+				}
+				return true;
+			}
+
+
 			//Add to news feed if status was updated
 		}
 
 		function deleteMilestone($milestoneId){
-			//Baja logica
+			$data['status_id'] = 0;
+			$this->db->where(array('milestone_id'=>$milestoneId))->update('milestones',$data);
 			return true;
+			//eliminar news feed
 		}
 
 		function addGoalPicture($data){
-			$this->db->insert('goals_pictures',$data);
-			return true;
-			//Add to news feed
+			$data['name'] = $this->uploadGoalPicture($data['name'],$data['goal_id']);
+			if($this->db->insert('goals_pictures',$data)) {
+				$newPictureId = $this->db->insert_id();
+				$newsFeed['news_type_id'] = 4;
+				$newsFeed['user_id'] = $_SESSION['user']['id'];
+				$newsFeed['object_id'] = $newPictureId;
+				$this->load->helper('date');
+				$newsFeed['created_date'] = mdate("%Y-%m-%d",time());
+				$this->addNewsFeed($newsFeed);
+				return $newGoalId;
+			}
+			else
+				return false;
 		}
 
 		function updateGoalPicture($data, $pictureId){
