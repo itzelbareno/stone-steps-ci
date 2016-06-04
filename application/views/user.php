@@ -1,12 +1,13 @@
 <div class="container">
-    <br><br>
+  <br><br>
     
-    <div class="row">  
-      <div class = "col s12 m4 center"><!--Columna Izquierda-->
-        <div class="container-90">
+  <div class="row"> <!-- Row General -->
+    <div class = "col s12 m4 center"><!--Columna Izquierda-->
+      <div class="container-90">
         <div class="row">
           <img class="materialboxed user" src="<?php echo base_url();?>images/users/<?php echo $picture;?>">
         </div>
+        
         <div class="row">
           <h4><?php echo $firstName." ".$middleName." ".$lastName;?></h4>
         </div>
@@ -35,71 +36,72 @@
         
         <br>
         
-        <div class="row">
+        <?php
+        if(isset($listGoals) || $_SESSION['user']['id'] == $id ) { ?>
+          <div class="row">
             <div class="collection left-align">
-              <?php if( $_SESSION['user']['id'] == $id ) { ?>
-                  <a href="<?php echo base_url(); ?>goal" class="collection-item waves-effect waves-light modal-trigger data-target=modal1">
-                    <div class="col s12 center">
-                    
-                      <span class="secondary-text">Add new goal</span>
-                    </div>
-                  </a>
+              <a href="<?php echo base_url(); ?>goal" class="collection-item waves-effect waves-light modal-trigger data-target=modal1">
+                <div class="col s12 center"><span class="secondary-text">Add new goal</span></div>
+              </a>
+
               <?php
-              }
-              ?>
-              
-              <?php 
-                for($i=0; $i<sizeof($listGoals);$i++): ?>
+              if(isset($listGoals)){
+                for($i=0; isset($listGoals) && $i<sizeof($listGoals);$i++){ ?>
                   <a href="#modal1" class="collection-item waves-effect waves-light modal-trigger data-target=modal1">
                     <div class="col s9">
                       <span class="text"><?php echo $listGoals[$i]['title']; ?></span>
                     </div>
                     <div class="col s3">
                       <?php 
-                        switch($listGoals[$i]['statusId'])
-                        {
-                          case 2:?>
-                            <span class="badge text">Pending</span><?php
-                            break;
-                          case 3:?>
-                            <span class="badge accent-text">Completed</span><?php
-                            break;
-                        }?>                      
+                      switch($listGoals[$i]['statusId'])
+                      {
+                        case 2:?>
+                          <span class="badge text">Pending</span><?php
+                          break;
+                        case 3:?>
+                          <span class="badge accent-text">Completed</span><?php
+                          break;
+                      }
+                      ?>                      
                     </div>
                   </a>
-              <?php endfor; ?>
-              
+                <?php 
+                }
+              } 
+              ?>   
+            </div>
+          </div>
+          <?php
+        }
+        ?>
+      </div> <!-- Container-90 -->
+    </div><!--Columna Izquierda-->
+    
+    <div class="col s12 m8"><!--Columna Derecha-->
+      <div class="container"> <!-- Container2 -->
+        <div class="row">
+          <div class="card-panel grey lighten-5 z-depth-1">
+            <div class="row valign-wrapper">
+              <div class="col s2">
+                <img src="<?php echo base_url();?>images/knowledge.png" class="image-card">
+              </div>
+              <div class="col s10">
+                <span class="box-title">
+                  <a href="#">Graduarme summa cum laude </a>was added.<br>
+                </span>
+              </div>
+            </div>
+            <div class="row valign-wrapper">
+              <div class="col s12">
+                <span class="box-content">
+                  <a href="#">Deadline: Thursday, June 30, 2016</a><br>
+                  Según mi promedio, puedo graduarme con mérito académico pero debo mantener el promedio por lo que queda del semestre. Así que debo mantener un promedio final de al menos 98.
+                </span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
       
-      
-      <div class="col s12 m8"><!--Columna Derecha-->
-        <div class="container">
-        <div class="row">
-          <div class="card-panel grey lighten-5 z-depth-1">
-                <div class="row valign-wrapper">
-                  <div class="col s2">
-                    <img src="<?php echo base_url();?>images/knowledge.png" class="image-card">
-                  </div>
-                  <div class="col s10">
-                    <span class="box-title">
-                      <a href="#">Graduarme summa cum laude </a>was added.<br>
-                    </span>
-                  </div>
-              </div>
-                <div class="row valign-wrapper">
-                  <div class="col s12">
-                    <span class="box-content">
-                      <a href="#">Deadline: Thursday, June 30, 2016</a><br>
-                      Según mi promedio, puedo graduarme con mérito académico pero debo mantener el promedio por lo que queda del semestre. Así que debo mantener un promedio final de al menos 98.
-                    </span>
-                  </div>
-                </div>
-            </div>
-        </div>
-        
         <div class="row">
           <div class="card-panel grey lighten-5 z-depth-1">
                 <div class="row valign-wrapper">
@@ -122,7 +124,7 @@
                 </div>
             </div>
         </div>
-        
+      
         <div class="row">
           <div class="card-panel grey lighten-5 z-depth-1">
                 <div class="row valign-wrapper">
@@ -146,10 +148,9 @@
                 </div>
             </div>
         </div> 
-        
-          
-      </div> <!-- segunda columna -->
-      </div>
-    </div>  <!-- row general -->  
     
-  </div> <!-- container -->
+      </div> <!-- Container2 -->
+    </div> <!-- Columna Derecha -->
+  </div>  <!-- row general -->  
+    
+</div> <!-- container -->

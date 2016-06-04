@@ -74,6 +74,27 @@
 			}
 			
 		}
+		
+		function create_milestone($goalId){
+			$milestone['goal_id'] = $goalId;
+			$milestone['title'] = $_POST['milestone_title'];
+			if($_POST['is_completed'])
+				$milestone['status_id'] = 3;
+			else
+				$milestone['status_id'] = 2;
+			$milestone['completed_date'] = mdate("%Y-%m-%d",time());
+					
+			$result = $this->model->addMilestone($milestone);
+						
+			if($result === false){
+				$data['error']="Error: Could not create milestone at the moment, please try again later.";
+				$this->session->set_flashdata('error-milestone', $data);
+				redirect(base_url().'goal');
+			}
+			else{
+				redirect(base_url().'goal/update_milestones/'.$goalId);
+			}			
+		}
 
 
 	}

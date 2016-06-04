@@ -216,7 +216,7 @@
 				$data[$i]['lastUpdateDate']=$goals[$i]->last_update_date;
 				$data[$i]['isPublic']=$goals[$i]->is_public;
             }
-			if(isset($data)){
+			if(sizeof($goals)>0){
             	return $data;
             }
             else{
