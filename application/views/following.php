@@ -5,8 +5,9 @@
 	</div>
 
 	<?php 
-		if(sizeof($following)>0){
+		if($following!=false){
 			for($i=0;$i<sizeof($following);$i++) {
+
 	?>
 
 		<?php if($i%2==0){ ?>
