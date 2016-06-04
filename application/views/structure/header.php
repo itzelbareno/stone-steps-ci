@@ -35,7 +35,7 @@
                   <i class="material-icons">close</i>
                 </div>
               </form></li>
-              <li class="user-name"><a href="<?php echo base_url(); ?>user/<?php echo $_SESSION['user']['id']; ?>"><?php echo $_SESSION['user']['firstName'];?></a></li>
+              <li class="user-name"><a href="<?php echo base_url(); ?>user"><?php echo $_SESSION['user']['firstName'];?></a></li>
               <li><img class="circle responsive-img user-profile" src="<?php echo base_url(); ?>images/users/<?php echo $_SESSION['user']['picture']; ?>"></li>
               <li><a class="dropdown-button" href="#!" data-activates="dropdown1"><i class="material-icons right">arrow_drop_down</i></a></li>
             </ul>

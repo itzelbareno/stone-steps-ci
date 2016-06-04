@@ -100,9 +100,9 @@
             if(sizeof($usersResults)>0)
             	return $users;
 			else
-				return false;
+				return false;	
 		}
-
+		
 		function isFollowing($user_id){
 			if(sizeof($this->db->where(array('user_id'=>$_SESSION['user']['id'],'user_following_id'=>$user_id))->get('following')->result())>0)
 				return true;
@@ -115,11 +115,15 @@
 		}
 
 		function stopFollowing($userId){
-			$this->db->where(array('user_following_id'=>$userId))->delete('following');
+			$this->db->where(array('user_id'=>$_SESSION['user']['id'],'user_following_id'=>$userId))->delete('following');
 		}
 
 		function getCompletedGoals($userId){
 			return sizeof($this->db->where(array('user_id'=>$userId,'status_id'=>3))->get('goals')->result());
+		}
+		
+		function getPendingGoals($userId){
+			return sizeof($this->db->where(array('user_id'=>$userId,'status_id'=>2))->get('goals')->result());
 		}
 
 		function uploadUserPicture($file){
@@ -197,7 +201,7 @@
 		}
 
 		function getGoals($userId){
-			$goals = $this->db->where(array('user_id'=>$userId))->get('users')->result();
+			$goals = $this->db->where(array('user_id'=>$userId))->get('goals')->result();
 			for($i=0; sizeof($goals)>0 && $i<sizeof($goals) ;$i++){
 				$data[$i]['id']=$goals[$i]->goal_id;
 				$data[$i]['title']=$goals[$i]->title;
@@ -212,7 +216,7 @@
 				$data[$i]['lastUpdateDate']=$goals[$i]->last_update_date;
 				$data[$i]['isPublic']=$goals[$i]->is_public;
             }
-            if(sizeof($data)>0){
+			if(isset($data)){
             	return $data;
             }
             else{

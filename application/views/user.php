@@ -5,74 +5,69 @@
       <div class = "col s12 m4 center"><!--Columna Izquierda-->
         <div class="container-90">
         <div class="row">
-          <img class="materialboxed user" src="http://placehold.it/150/0/eeeee">
+          <img class="materialboxed user" src="<?php echo base_url();?>images/users/<?php echo $picture;?>">
         </div>
         <div class="row">
-          <h4>Rebeca Hernández Arellano</h4>
+          <h4><?php echo $firstName." ".$middleName." ".$lastName;?></h4>
+        </div>
+        
+        <div class="row">
+          <?php if( $_SESSION['user']['id'] != $id && !$isFollowing) { ?>
+            <a href="<?php echo base_url(); ?>user/startFollowing/<?php echo $id;?>" class="waves-effect waves-light btn" method= "post">Follow</a> 
+          <?php
+          }
+          else if ( $_SESSION['user']['id'] != $id && $isFollowing){?>
+            <a href="<?php echo base_url(); ?>user/stopFollowing/<?php echo $id;?>" class="waves-effect waves-light btn" method= "post">Unfollow</a>
+          <?php
+          }
+          ?>          
+        </div>
+        
+        <div class="row">
+          <i class = "material-icons">email</i> <?php echo $email;?>
         </div>
         <div class="row">
-          <i class = "material-icons">email</i> rebecahdezare@gmail.com
+          <i class = "material-icons">done</i><?php echo $completed;?> Accomplished Goals 
         </div>
         <div class="row">
-          <i class = "material-icons">done</i> 2 Accomplished Goals
-        </div>
-        <div class="row">
-          <i class = "material-icons">schedule</i> 3 Pending Goals
-        </div>
+          <i class = "material-icons">schedule</i><?php echo $pending;?> Pending Goals 
+        </div>  
+        
         <br>
+        
         <div class="row">
             <div class="collection left-align">
-
-              <a href="#modal1" class="collection-item waves-effect waves-light modal-trigger data-target=modal1">
-                <div class="col s12 center">
-                  <span class="secondary-text">Add new goal</span>
-                </div>
-              </a>
-
-              <a href="#modal1" class="collection-item waves-effect waves-light modal-trigger data-target=modal1">
-                <div class="col s9">
-                  <span class="text">Graduarme summa cum laude</span>
-                </div>
-                <div class="col s3">
-                  <span class="badge text">Going</span>
-                </div>
-              </a>
-
-              <a href="#modal1" class="collection-item waves-effect waves-light modal-trigger data-target=modal1">
-                <div class="col s9">
-                  <span class="text">Read 12 books in a year</span>
-                </div>
-                <div class="col s3">
-                  <span class="badge primary-text">N/A</span>
-                </div>
-              </a>
-              <a href="#modal1" class="collection-item waves-effect waves-light modal-trigger data-target=modal1">
-                <div class="col s9">
-                  <span class="text">Levantar 20lb de brazo</span>
-                </div>
-                <div class="col s3">
-                  <span class="badge text">Going</span>
-                </div>
-              </a>
-
-              <a href="#modal1" class="collection-item waves-effect waves-light modal-trigger data-target=modal1">
-                <div class="col s9">
-                  <span class="text">Ir al gym por tres meses</span>
-                </div>
-                <div class="col s3">
-                  <span class="badge accent-text">Completed</span>
-                </div>
-              </a>
-
-              <a href="#modal1" class="collection-item waves-effect waves-light modal-trigger data-target=modal1">
-                <div class="col s9">
-                  <span class="text">Dejar facebook 3 meses</span>
-                </div>
-                <div class="col s3">
-                  <span class="badge accent-text">Completed</span>
-                </div>
-              </a>
-
+              <?php if( $_SESSION['user']['id'] == $id ) { ?>
+                <a href="#modal1" class="collection-item waves-effect waves-light modal-trigger data-target=modal1">
+                  <div class="col s12 center">
+                    <a href="<?php echo base_url(); ?>goal"><span class="secondary-text">Add new goal</span></a>
+                  </div>
+                </a>
+              <?php
+              }
+              ?>
+              
+              <?php 
+                for($i=0; $i<sizeof($listGoals);$i++): ?>
+                  <a href="#modal1" class="collection-item waves-effect waves-light modal-trigger data-target=modal1">
+                    <div class="col s9">
+                      <span class="text"><?php echo $listGoals[$i]['title']; ?></span>
+                    </div>
+                    <div class="col s3">
+                      <?php 
+                        switch($listGoals[$i]['statusId'])
+                        {
+                          case 2:?>
+                            <span class="badge text">Pending</span><?php
+                            break;
+                          case 3:?>
+                            <span class="badge accent-text">Completed</span><?php
+                            break;
+                        }?>                      
+                    </div>
+                  </a>
+              <?php endfor; ?>
+              
             </div>
           </div>
         </div>
@@ -85,7 +80,7 @@
           <div class="card-panel grey lighten-5 z-depth-1">
                 <div class="row valign-wrapper">
                   <div class="col s2">
-                    <img src="images/knowledge.png" class="image-card">
+                    <img src="<?php echo base_url();?>images/knowledge.png" class="image-card">
                   </div>
                   <div class="col s10">
                     <span class="box-title">
@@ -108,7 +103,7 @@
           <div class="card-panel grey lighten-5 z-depth-1">
                 <div class="row valign-wrapper">
                   <div class="col s2">
-                    <img src="images/personal.png" class="image-card">
+                    <img src="<?php echo base_url();?>images/personal.png" class="image-card">
                   </div>
                   <div class="col s10">
                     <span class="box-title">
@@ -131,7 +126,7 @@
           <div class="card-panel grey lighten-5 z-depth-1">
                 <div class="row valign-wrapper">
                   <div class="col s2">
-                    <img src="images/sports.png" class="image-card">
+                    <img src="<?php echo base_url();?>images/sports.png" class="image-card">
                   </div>
                   <div class="col s10">
                     <span class="box-title">
