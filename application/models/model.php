@@ -104,7 +104,7 @@
 		}
 
 		function isFollowing($user_id){
-			if(sizeof($this->db->where(array('user_id'=>$_SESSION['user']['id'],'user_following_id'=>$user_id))->get('following')->result())>0){
+			if(sizeof($this->db->where(array('user_id'=>$_SESSION['user']['id'],'user_following_id'=>$user_id))->get('following')->result())>0)
 				return true;
 			return false;
 		}
