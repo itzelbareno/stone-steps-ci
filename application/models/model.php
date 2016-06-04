@@ -376,7 +376,7 @@
 
 		function updateMilestone($data, $milestoneId){			
 			$oldMilestone = $this->getMilestone($milestoneId);
-			if($this->db->where(array('milestone_id'=>$milestoneId))->update('milestones',$data);){
+			if($this->db->where(array('milestone_id'=>$milestoneId))->update('milestones',$data)) {
 				if($data['status_id'] != $oldMilestone['statusId']){
 					$newsFeed['news_type_id'] = 3;
 					$newsFeed['user_id'] = $_SESSION['user']['id'];
