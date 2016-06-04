@@ -369,8 +369,35 @@
 			return true;
 		}
 
-		function uploadGoalPicture($picture){
-
+		function uploadGoalPicture($picture, $goalId){
+			$subId = sizeof($this->db->where('goal_id'=>$goalId)->get('goals_pictures'));
+			$dir="./images/goals/";            
+			$type = explode('/',$file['type']);
+			$type = $type[1];
+			if($type == 'jpeg')
+				$type = 'jpg';
+			$name = $goalId.'_'.$subId.'.'.$type;
+			$config['upload_path']=$dir;
+			$config['allowed_types']='jpg|png';
+			$config['file_name']=$name;
+			$this->load->library('upload',$config);
+            $this->upload->initialize($config);
+			if(!$this->upload->do_upload('picture')){
+				echo $this->upload->display_errors();
+				return false;
+			}
+			else{
+				list($width, $height) = getimagesize($dir.''.$name);
+				$config['source_image']=$dir.''.$name;
+				$config['maintain_ratio']=TRUE;
+				$config['width'] = 640;
+				$config['height'] = 480;
+				$this->image_lib->clear();
+				$this->load->library('upload',$config);
+				$this->image_lib->initialize($config);
+				$this->image_lib->resize();
+                return $name;                                
+			}
 		}
 
 		//NEWS FEED
