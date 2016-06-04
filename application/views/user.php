@@ -38,11 +38,12 @@
         <div class="row">
             <div class="collection left-align">
               <?php if( $_SESSION['user']['id'] == $id ) { ?>
-                <a href="#modal1" class="collection-item waves-effect waves-light modal-trigger data-target=modal1">
-                  <div class="col s12 center">
-                    <a href="<?php echo base_url(); ?>goal"><span class="secondary-text">Add new goal</span></a>
-                  </div>
-                </a>
+                  <a href="<?php echo base_url(); ?>goal" class="collection-item waves-effect waves-light modal-trigger data-target=modal1">
+                    <div class="col s12 center">
+                    
+                      <span class="secondary-text">Add new goal</span>
+                    </div>
+                  </a>
               <?php
               }
               ?>
