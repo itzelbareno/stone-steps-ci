@@ -14,37 +14,30 @@
 			$data['user']['last_name'] = $_POST['last_name'];
 			$data['user']['email'] = $_POST['email'];
 			$data['user']['password'] = $_POST['password'];
-			if($_FILES['picture']['name'] == ""){
-				$data['user']['picture'] = "";
-			}
-			else{
-				$data['user']['picture'] = $_FILES['picture'];	
-			}			
+			
+			if($_POST['password'] == $_POST['confirm_password']){
+				if($_FILES['picture']['name'] == ""){
+					$data['user']['picture'] = "";
+				}
+				else{
+					$data['user']['picture'] = $_FILES['picture'];	
+				}			
 
-			$result = $this->model->signUp($data['user']);
-			if($result === true){
-				redirect(base_url());
+				$result = $this->model->signUp($data['user']);
+				if($result === true){
+					redirect(base_url());
+				}
+				else{
+					$data['error']=$result;
+					$this->session->set_flashdata('error-user', $data);
+					redirect(base_url().'signup');
+				}	
 			}
 			else{
-				$data['error']=$result;
+				$data['error']="Passwords do not match.";
 				$this->session->set_flashdata('error-user', $data);
 				redirect(base_url().'signup');
-			}
+			}	
 		}
-		
-		public function checkPasswords() {
-			$pass1 = document.getElementById("password").value;
-			$pass2 = document.getElementById("confirm_password").value;
-			$ok = true;
-			if ($pass1 != $pass2) {
-				alert("Passwords Do not match");
-				//document.getElementById("password").style.borderColor = "#E34234";
-				//document.getElementById("confirm_password").style.borderColor = "#E34234";
-				$ok = false;
-			}
-			return $ok;
-		}
-		
-
 	}
 ?>

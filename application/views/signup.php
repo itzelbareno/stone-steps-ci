@@ -19,7 +19,7 @@
     
     <div class="row">
       <!-- Empieza Segunda Columna -->
-      <form  method="post" enctype="multipart/form-data" onsubmit="return checkPasswords()" action="<?php echo base_url(); ?>signup/receiveData" class="col s12 m6 push-m5 l5 push-l5" id="signupForm">
+      <form  method="post" enctype="multipart/form-data" action="<?php echo base_url(); ?>signup/receiveData" class="col s12 m6 push-m5 l5 push-l5" id="signupForm">
         
         <div class= "row">
           <div class="input-field secondary-text col s6">
@@ -47,7 +47,7 @@
           </div>
         </div>
       
-        <div class="row ">
+        <div class="row">
           <div class="input-field secondary-text col s6">
             <input name="password" id="password" type="password" class="validate" required>
             <label for="password" class ="secondary-text">Password</label>
