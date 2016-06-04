@@ -317,8 +317,10 @@
 		//ADD, UPDATE, DELETE GOAL
 
 		function addGoal($data){
-			$this->db->insert('goals',$data);
-			return true;
+			if($this->db->insert('goals',$data))
+				return $this->db->insert_id();
+			else
+				return false;
 			//Add to news feed
 		}
 
