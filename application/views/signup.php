@@ -23,26 +23,26 @@
         
         <div class= "row">
           <div class="input-field secondary-text col s6">
-            <input name="first_name" id="first_name" type="text" class="validate" required>
+            <input name="first_name" id="first_name" type="text" class="validate" value="<?php if(isset($_SESSION['error-user'])) echo $_SESSION['error-user']['user']['first_name']; ?>" required>
             <label for="first_name" class ="secondary-text">First Name</label>
           </div>
         
           <div class="input-field secondary-text col s6">
-            <input name="middle_name" id="middle_name" type="text" class="validate">
+            <input name="middle_name" id="middle_name" type="text" value="<?php if(isset($_SESSION['error-user'])) echo $_SESSION['error-user']['user']['middle_name']; ?>" class="validate">
             <label for="middle_name" class ="secondary-text">Middle Name</label>
           </div>
         </div>
     
         <div class= "row"> 
           <div class="input-field secondary-text">
-            <input name="last_name" id="last_name" type="text" class="validate" required>
+            <input name="last_name" id="last_name" type="text" class="validate" value="<?php if(isset($_SESSION['error-user'])) echo $_SESSION['error-user']['user']['last_name']; ?>" required>
             <label for="last_name" class ="secondary-text">Last Name</label>
           </div>
         </div>
       
         <div class="row">
           <div class="input-field secondary-text">
-            <input name="email" id="email" type="email" class="validate" required>
+            <input name="email" id="email" type="email" class="validate" value="<?php if(isset($_SESSION['error-user'])) echo $_SESSION['error-user']['user']['email']; ?>" required>
             <label for="email" class ="secondary-text">Email</label>
           </div>
         </div>
