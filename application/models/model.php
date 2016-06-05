@@ -201,7 +201,7 @@
 		}
 
 		function getGoals($userId){
-			$goals = $this->db->where(array('user_id'=>$userId))->get('goals')->result();
+			$goals = $this->db->where(array('user_id'=>$userId, 'status_id !='=>0))->get('goals')->result();
 			for($i=0; sizeof($goals)>0 && $i<sizeof($goals) ;$i++){
 				$data[$i]['id']=$goals[$i]->goal_id;
 				$data[$i]['title']=$goals[$i]->title;
@@ -284,7 +284,7 @@
 				$data[$i]['goalId']=$milestones[$i]->goal_id;
 				$data[$i]['title']=$milestones[$i]->title;
 				$data[$i]['statusId']=$milestones[$i]->status_id;
-				$data[$i]['completedDate']=$milestones[$i]->completedDate;
+				$data[$i]['completedDate']=$milestones[$i]->completed_date;
             }
             if(sizeof($milestones)>0){
             	return $data;

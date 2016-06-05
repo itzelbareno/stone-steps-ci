@@ -67,8 +67,17 @@
 				</div>
 				
 				<?php 
-				if(isset($listMilestones) || $_SESSION['user']['id'] == $userId ) { ?>
+				if(isset($listMilestones) || $_SESSION['user']['id'] == $userId ) {?> 
 				<div class="row">
+					<div class="col s12 center">
+						<?php if($_SESSION['user']['id'] == $userId ) {?>					
+						<a href="<?php echo base_url(); ?>/goal/delete_goal/<?php echo $goalInfo['id']; ?>" class="waves-effect waves-light btn red" method= "post">Delete Goal</a>
+						<?php
+						}
+						?>
+						<br><br>
+					</div>
+								
 					<div class="collection left-align">
 						<!-- Add a New Milestone -->
 						<?php 

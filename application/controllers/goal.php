@@ -122,6 +122,11 @@
 			if($data['goal']['userId']!=$_SESSION['user']['id']) redirect(base_url());
 			$this->load->view('structure/template',$data);
 		}
+		
+		function delete_goal($goalId){
+			$this->model->deleteGoal($goalId);
+			redirect(base_url().'user/');
+		}
 
 		function update_milestones($goalId) {
 			$data['content']='updateGoal2';
