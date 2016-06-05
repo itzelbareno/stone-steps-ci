@@ -150,6 +150,7 @@
 			$config['file_name']=$name;
 			$this->load->library('upload',$config);
             $this->upload->initialize($config);
+            $this->upload->overwrite = true;
 			if(!$this->upload->do_upload('picture')){
 				echo $this->upload->display_errors();
 				return false;
@@ -218,6 +219,7 @@
 				$data[$i]['userId']=$goals[$i]->user_id;
 				$data[$i]['goalTypeId']=$goals[$i]->goal_type_id;
 				$data[$i]['statusId']=$goals[$i]->status_id;
+				$data[$i]['statusName']=$this->getStatusName($goals[$i]->status_id);
 				$data[$i]['creationDate']=$goals[$i]->creation_date;
 				$data[$i]['startDate']=$goals[$i]->start_date;
 				$data[$i]['completedDate']=$goals[$i]->completed_date;
@@ -464,6 +466,7 @@
 			$config['file_name']=$name;
 			$this->load->library('upload',$config);
             $this->upload->initialize($config);
+            $this->upload->overwrite = true;
 			if(!$this->upload->do_upload('name')){
 				echo $this->upload->display_errors();
 				return false;
@@ -587,7 +590,7 @@
 					case 3: //updated milestone status
 						$milestone = $this->getMilestone($item->object_id);
 						if($milestone['statusId']!=0){
-							$goal = $this->getGoal($milestone['goal_id']);
+							$goal = $this->getGoal($milestone['goalId']);
 							$user = $this->getUser($item->user_id);
 							if($goal['statusId']!=0){
 								$data[$c]['id'] = $item->news_feed_id;
@@ -602,7 +605,7 @@
 								$data[$c]['goalTitle'] = $goal['title'];
 								$data[$c]['goalStatus'] = $this->getStatusName($goal['statusId']);
 								$data[$c]['milestoneTitle'] = $milestone['title'];
-								$data[$c]['milestoneStatus'] = $this->getStatusName($milestone['status']);
+								$data[$c]['milestoneStatus'] = $this->getStatusName($milestone['statusId']);
 								$data[$c]['goalDeadline'] = $goal['finishingDate'];
 								$category = $this->getCategory($goal['goalTypeId']);
 								$data[$c]['categoryName'] = $category['name'];

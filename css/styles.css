@@ -297,3 +297,23 @@ Profile
   width: auto;
   height: 120;
 }
+
+div.show-image {
+    position: relative;
+    float:center;
+    margin:5px;
+}
+div.show-image:hover img{
+    opacity:0.5;
+}
+div.show-image:hover a{
+    display: block;
+}
+div.show-image a{
+    position:absolute;
+    display:none;
+}
+div.show-image a{
+    top:0;
+    left:70%;
+}

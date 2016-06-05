@@ -190,7 +190,7 @@
 				<form  id="form<?php echo $i; ?>" method="post" class="col s8 offset-s2 m6 offset-m3 l4 offset-l4" action="<?php  echo base_url();?>goal/save_milestone2/<?php echo $listMilestones[$i]['id']; ?>" enctype="multipart/form-data">
 					<div class="modal-content">
 						<div class="row">
-							<div class="col s12 m6">
+							<div class="col s12 m8">
 								<div class="input-field secondary-text col s10 m10 l10">
 								<br>
 									<input id="goal_title" name="milestone_title2" type="text" class="validate" value="<?php echo $listMilestones[$i]['title']; ?>">
@@ -198,7 +198,7 @@
 								</div>
 							</div>
 
-							<div class="col s12 m6">
+							<div class="col s12 m4">
 								<p>Status:</p>
 								<form action="#">
 								<div class="row">

@@ -1,11 +1,20 @@
 <div class="container">
   <br><br>
-    
+
+  <div id="modalpicture" class="modal">
+    <div class="modal-content">
+      
+    </div>
+  </div>
+
   <div class="row"> <!-- Row General -->
     <div class = "col s12 m4 center"><!--Columna Izquierda-->
       <div class="container-90">
         <div class="row">
-          <img class="materialboxed user z-depth=1" src="<?php echo base_url();?>images/users/<?php echo $picture;?>">
+          <div class="show-image">
+            <img class="materialboxed user z-depth-1" src="<?php echo base_url();?>images/users/<?php echo $picture;?>">
+            <a href="#modalPicture" class="modal-trigger data-target=modal1"><i class = "accent-text material-icons">edit</i></a>
+          </div>
         </div>
         
         <div class="row">
@@ -59,17 +68,7 @@
                       <span class="text"><?php echo $listGoals[$i]['title']; ?></span>
                     </div>
                     <div class="col s3">
-                      <?php 
-                      switch($listGoals[$i]['statusId'])
-                      {
-                        case 2:?>
-                          <span class="badge text">Pending</span><?php
-                          break;
-                        case 3:?>
-                          <span class="badge accent-text">Completed</span><?php
-                          break;
-                      }
-                      ?>                      
+                      <span class="badge <?php if($listGoals[$i]['statusId']==2) echo 'grey-text'; else echo 'accent-text';  ?>"><?php echo $listGoals[$i]['statusName']; ?></span>                 
                     </div>
                   </a>
                 <?php 
@@ -94,11 +93,11 @@
           <div class="card-panel grey lighten-5 z-depth-1">
             <div class="row valign-wrapper">
               <div class="col s2">
-                <a href="<?php echo base_url(); ?>goal/view/<?php echo $nf_user[$i]['goalId']; ?>"><img src="<?php echo base_url(); ?>images/<?php echo $nf_user[$i]['categoryPicture']; ?>" class="circle responsive-img z-depth-1"></a>
+                <a href="<?php echo base_url(); ?>goal/view/<?php echo $id; ?>/<?php echo $nf_user[$i]['goalId']; ?>"><img src="<?php echo base_url(); ?>images/<?php echo $nf_user[$i]['categoryPicture']; ?>" class="circle responsive-img z-depth-1"></a>
               </div>
               <div class="col s10">
                 <span class="box-title">
-                  <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?> </a> was created as a goal.<br>
+                  <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $id; ?>/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?> </a> was created as a goal.<br>
                 </span>
                 <span class="box-time">
                   <?php echo $nf_user[$i]['date']; ?>
@@ -109,7 +108,7 @@
             <div class="row valign-wrapper">
               <div class="col s12">
                 <span class="box-content">
-                  <b>Goal title:</b> <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?> </a> <br>
+                  <b>Goal title:</b> <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $id; ?>/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?> </a> <br>
                   <b>Deadline:</b> <?php echo $nf_user[$i]['goalDeadline']; ?><br>
                   <b>Status:</b> <?php echo ucwords($nf_user[$i]['goalStatus']); ?><br>
                   <p><?php echo $nf_user[$i]['goalDescription']; ?></p>
@@ -126,11 +125,11 @@
           <div class="card-panel grey lighten-5 z-depth-1">
                 <div class="row valign-wrapper">
                   <div class="col s2">
-                    <a href="<?php echo base_url(); ?>goal/view/<?php echo $nf_user[$i]['goalId']; ?>"><img src="<?php echo base_url(); ?>images/<?php echo $nf_user[$i]['categoryPicture']; ?>" class="circle responsive-img z-depth-1"></a>
+                    <a href="<?php echo base_url(); ?>goal/view/<?php echo $id; ?>/<?php echo $nf_user[$i]['goalId']; ?>"><img src="<?php echo base_url(); ?>images/<?php echo $nf_user[$i]['categoryPicture']; ?>" class="circle responsive-img z-depth-1"></a>
                   </div>
                   <div class="col s10">
                     <span class="box-title">
-                      <?php echo $nf_user[$i]['milestoneTitle']; ?> was added to <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?> </a><br>
+                      <?php echo $nf_user[$i]['milestoneTitle']; ?> was added to <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $id; ?>/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?> </a><br>
                     </span>
                     <span class="box-time">
                       <?php echo $nf_user[$i]['date']; ?>
@@ -142,7 +141,7 @@
                   <div class="col s12 center align">
                     <span class="box-content">
                       <b>Milestone title:</b> <?php echo $nf_user[$i]['milestoneTitle']; ?><br>
-                      <b>Goal title:</b> <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?></a><br>
+                      <b>Goal title:</b> <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $id; ?>/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?></a><br>
                       <b>Goal deadline:</b> <?php echo $nf_user[$i]['goalDeadline']; ?><br>
                       <b>Goal status:</b> <?php echo ucwords($nf_user[$i]['goalStatus']); ?>
                     </span>
@@ -157,11 +156,11 @@
           <div class="card-panel grey lighten-5 z-depth-1">
                 <div class="row valign-wrapper">
                   <div class="col s2">
-                    <a href="<?php echo base_url(); ?>goal/view/<?php echo $nf_user[$i]['goalId']; ?>"><img src="<?php echo base_url(); ?>images/<?php echo $nf_user[$i]['categoryPicture']; ?>" class="circle responsive-img z-depth-1"></a>
+                    <a href="<?php echo base_url(); ?>goal/view/<?php echo $id; ?>/<?php echo $nf_user[$i]['goalId']; ?>"><img src="<?php echo base_url(); ?>images/<?php echo $nf_user[$i]['categoryPicture']; ?>" class="circle responsive-img z-depth-1"></a>
                   </div>
                   <div class="col s10">
                     <span class="box-title">
-                      <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?> </a> status was updated.<br>
+                      <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $id; ?>/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?> </a> status was updated.<br>
                     </span>
                     <span class="box-time">
                       <?php echo $nf_user[$i]['date']; ?>
@@ -172,7 +171,7 @@
                 <div class="row valign-wrapper">
                   <div class="col s12 center align">
                     <span class="box-content">
-                      <b>Goal title:</b> <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?></a><br>
+                      <b>Goal title:</b> <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $id; ?>/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?></a><br>
                       <b>Deadline:</b> <?php echo $nf_user[$i]['goalDeadline']; ?><br>
                       <b>Status:</b> <?php echo ucwords($nf_user[$i]['goalStatus']); ?>
                     </span>
@@ -187,11 +186,11 @@
           <div class="card-panel grey lighten-5 z-depth-1">
               <div class="row valign-wrapper">
                 <div class="col s2">
-                  <a href="<?php echo base_url(); ?>goal/view/<?php echo $nf_user[$i]['goalId']; ?>"><img src="<?php echo base_url(); ?>images/<?php echo $nf_user[$i]['categoryPicture']; ?>" class="circle responsive-img z-depth-1"></a>
+                  <a href="<?php echo base_url(); ?>goal/view/<?php echo $id; ?>/<?php echo $nf_user[$i]['goalId']; ?>"><img src="<?php echo base_url(); ?>images/<?php echo $nf_user[$i]['categoryPicture']; ?>" class="circle responsive-img z-depth-1"></a>
                 </div>
                 <div class="col s10">
                   <span class="box-title">
-                    <?php echo $nf_user[$i]['milestoneTitle']; ?> status was updated in goal <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?> </a><br>
+                    <?php echo $nf_user[$i]['milestoneTitle']; ?> status was updated in goal <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $id; ?>/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?> </a><br>
                   </span>
                   <span class="box-time">
                     <?php echo $nf_user[$i]['date']; ?>
@@ -202,7 +201,7 @@
                   <div class="col s12 center align">
                     <span class="box-content">
                       <b>Milestone title:</b> <?php echo $nf_user[$i]['milestoneTitle']; ?><br>
-                      <b>Goal title:</b> <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?></a><br>
+                      <b>Goal title:</b> <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $id; ?>/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?></a><br>
                       <b>Goal deadline:</b> <?php echo $nf_user[$i]['goalDeadline']; ?><br>
                       <b>Milestone status:</b> <?php echo ucwords($nf_user[$i]['milestoneStatus']); ?>
                     </span>
@@ -216,11 +215,11 @@
           <div class="card-panel grey lighten-5 z-depth-1">
               <div class="row valign-wrapper">
                 <div class="col s2">
-                  <a href="<?php echo base_url(); ?>goal/view/<?php echo $nf_user[$i]['goalId']; ?>"><img src="<?php echo base_url(); ?>images/<?php echo $nf_user[$i]['categoryPicture']; ?>" class="circle responsive-img z-depth-1"></a>
+                  <a href="<?php echo base_url(); ?>goal/view/<?php echo $id; ?>/<?php echo $nf_user[$i]['goalId']; ?>"><img src="<?php echo base_url(); ?>images/<?php echo $nf_user[$i]['categoryPicture']; ?>" class="circle responsive-img z-depth-1"></a>
                 </div>
                 <div class="col s10">
                   <span class="box-title">
-                    A picture was added to <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?> </a><br>
+                    A picture was added to <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $id; ?>/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?> </a><br>
                   </span>
                   <span class="box-time">
                     <?php echo $nf_user[$i]['date']; ?>
@@ -230,7 +229,7 @@
               <div class="row valign-wrapper">
                   <div class="col s12 center align">
                     <span class="box-content">
-                      <b>Goal title:</b> <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?></a><br>
+                      <b>Goal title:</b> <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $id; ?>/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?></a><br>
                       <b>Goal deadline:</b> <?php echo $nf_user[$i]['goalDeadline']; ?><br>
                     </span>
                   </div>
@@ -254,7 +253,7 @@
                   </div>
                   <div class="col s10">
                     <span class="box-title">
-                      <a href="<?php echo base_url(); ?>user/<?php echo $nf_user[$i]['userId']; ?>"><?php echo $nf_user[$i]['userName']; ?></a> started following someone.<br>
+                      <a href="<?php echo base_url(); ?>user/user_profile/<?php echo $nf_user[$i]['userId']; ?>"><?php echo $nf_user[$i]['userName']; ?></a> started following someone.<br>
                     </span>
                     <span class="box-time">
                       <?php echo $nf_user[$i]['date']; ?>

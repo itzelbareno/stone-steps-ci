@@ -24,6 +24,7 @@
 				$data['listGoals'][$i]['title'] = $listGoals[$i]['title'];
 				$data['listGoals'][$i]['id'] = $listGoals[$i]['id'];
 				$data['listGoals'][$i]['statusId'] = $listGoals[$i]['statusId'];
+				$data['listGoals'][$i]['statusName'] = $listGoals[$i]['statusName'];
 			}
 
 			$data['nf_user'] = $this->model->getNewsFeedFromUser($_SESSION['user']['id']);

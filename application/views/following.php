@@ -22,7 +22,7 @@
 		            </div>
 		            <div class="col s10">
 		              <span class="box-title">
-		                <a href="<?php echo base_url(); ?>images/users/<?php echo $following[$i]['id']; ?>"><?php echo $following[$i]['name']; ?></a><br>
+		                <a href="<?php echo base_url(); ?>user/user_profile/<?php echo $following[$i]['id']; ?>"><?php echo $following[$i]['name']; ?></a><br>
 		              </span>
 		              <span class="box-time">
 		              	<?php echo $following[$i]['completedGoals']; ?> goals completed.
