@@ -22,6 +22,7 @@
 			$listGoals = $this->model->getGoals($_SESSION['user']['id']);
 			for($i=0; $listGoals!=false && $i<sizeof($listGoals);$i++){
 				$data['listGoals'][$i]['title'] = $listGoals[$i]['title'];
+				$data['listGoals'][$i]['id'] = $listGoals[$i]['id'];
 				$data['listGoals'][$i]['statusId'] = $listGoals[$i]['statusId'];
 			}
 						
@@ -48,6 +49,7 @@
 			$listGoals = $this->model->getGoals($userId);
 			for($i=0; $listGoals!=false && $i<sizeof($listGoals);$i++){
 				$data['listGoals'][$i]['title'] = $listGoals[$i]['title'];
+				$data['listGoals'][$i]['id'] = $listGoals[$i]['id'];
 				$data['listGoals'][$i]['statusId'] = $listGoals[$i]['statusId'];
 			}
 			

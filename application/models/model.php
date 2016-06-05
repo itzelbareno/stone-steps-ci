@@ -6,7 +6,6 @@
 		}
 
 		//LOGIN, SIGNUP, HEADER
-
 		//Devuelve True si el usuario fue dado de alta exitosamente.
 		//Devuelve el error si no se pudo dar de alta al usuario.
 		//userData['first_name']
@@ -268,8 +267,8 @@
 			if(isset($picture->picture_id)){
 				$data['id']=$picture->picture_id;
 				$data['goalId']=$picture->goal_id;
-				$data['name']=$picture->picture_name;
-				$data['caption']=$picture->picture_caption;
+				$data['name']=$picture->name;
+				$data['caption']=$picture->caption;
 				return $data;
 			}
 			else{
@@ -401,6 +400,7 @@
 
 		function addGoalPicture($data){
 			$data['name'] = $this->uploadGoalPicture($data['name'],$data['goal_id']);
+			
 			if($this->db->insert('goals_pictures',$data)) {
 				$newPictureId = $this->db->insert_id();
 				$newsFeed['news_type_id'] = 4;
@@ -409,7 +409,7 @@
 				$this->load->helper('date');
 				$newsFeed['created_date'] = mdate("%Y-%m-%d",time());
 				$this->addNewsFeed($newsFeed);
-				return $newGoalId;
+				return $newPictureId;
 			}
 			else
 				return false;
@@ -423,23 +423,28 @@
 
 		function deleteGoalPicture($pictureId){
 			//baja logica
+			$data['goal_id'] = 0;
+			$this->db->where(array('picture_id'=>$pictureId))->update('goals_pictures',$data);	
 			return true;
 		}
 
 		function uploadGoalPicture($picture, $goalId){
-			$subId = sizeof($this->db->where(array('goal_id'=>$goalId))->get('goals_pictures')->result());
+			$id = $this->db->select_max('picture_id')->get('goals_pictures')->row()->picture_id;
+			$id++;
+			//$id = sizeof($this->db->where(array('goal_id'=>$goalId))->get('goals_pictures')->result());
 			$dir="./images/goals/";            
-			$type = explode('/',$file['type']);
+			$type = explode('/',$picture['type']);
 			$type = $type[1];
 			if($type == 'jpeg')
 				$type = 'jpg';
-			$name = $goalId.'_'.$subId.'.'.$type;
+			$name = $id.'.'.$type;
 			$config['upload_path']=$dir;
 			$config['allowed_types']='jpg|png';
 			$config['file_name']=$name;
 			$this->load->library('upload',$config);
             $this->upload->initialize($config);
-			if(!$this->upload->do_upload('picture')){
+			
+			if(!$this->upload->do_upload('name')){
 				echo $this->upload->display_errors();
 				return false;
 			}
@@ -449,8 +454,8 @@
 				$config['maintain_ratio']=TRUE;
 				$config['width'] = 640;
 				$config['height'] = 480;
+				$this->load->library('image_lib',$config);
 				$this->image_lib->clear();
-				$this->load->library('upload',$config);
 				$this->image_lib->initialize($config);
 				$this->image_lib->resize();
                 return $name;                                
@@ -476,7 +481,6 @@
 				return false;
 			}
 		}
-
 
 		function getNewsFeedFromUser($userId){
 			$newsFeed = $this->db->where(array('user_id'=>$userId))->get('news_feed')->result();
