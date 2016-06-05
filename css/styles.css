@@ -291,3 +291,9 @@ Profile
 .brand-logo-main b{
   font-weight: 400;
 }
+
+.goal-image
+{
+  width: auto;
+  height: 120;
+}

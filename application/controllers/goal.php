@@ -11,7 +11,7 @@
 
 		function view($userId=0, $goalId=0) {
 			//Preparar información del objetivo
-			$data['milestones'] = $this->model->getMilestones($goalId);
+			
 			$data['userId'] = $userId;
 			$goalInfo = $this->model->getGoal($goalId);
 			$data['goalInfo'] = $goalInfo;
@@ -22,7 +22,8 @@
 				$data['goalInfo']['status']	= 'Completed';	
 			}
 			
-			$listMilestones = $this->model->getMilestones($goalInfo['id']);		
+			$listMilestones = $this->model->getMilestones($goalInfo['id']);	
+			//$data['milestones'] = $this->model->getMilestones($goalInfo['id']);	
 			for($i=0; $listMilestones!=false && $i<sizeof($listMilestones);$i++){
 				$data['listMilestones'][$i]['title'] = $listMilestones[$i]['title'];
 				$data['listMilestones'][$i]['id'] = $listMilestones[$i]['id'];

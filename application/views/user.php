@@ -5,7 +5,7 @@
     <div class = "col s12 m4 center"><!--Columna Izquierda-->
       <div class="container-90">
         <div class="row">
-          <img class="materialboxed user" src="<?php echo base_url();?>images/users/<?php echo $picture;?>">
+          <img class="materialboxed user z-depth=1" src="<?php echo base_url();?>images/users/<?php echo $picture;?>">
         </div>
         
         <div class="row">
