@@ -42,10 +42,10 @@
 					<div class="input-field col s12 secondary-text" >
 						<select class="icons" name="goal_type_id" required >
 							<option value="" disabled <?php if (!isset($goal)) echo "selected";?>>Choose a Category</option>
-							<option value="1" <?php if (isset($goal)&&$goal['goalTypeId']==1) echo "selected";?> data-icon="<?php echo base_url(); ?>images/arts.png" class="left circle">Arts</option>
+							<option value="1" <?php if (isset($goal)&&$goal['goalTypeId']==1) echo "selected";?> data-icon="<?php echo base_url(); ?>images/art.png" class="left circle">Arts</option>
 							<option value="2" <?php if (isset($goal)&&$goal['goalTypeId']==2) echo "selected";?> data-icon="<?php echo base_url(); ?>images/knowledge.png" class="left circle">Knowledge</option>
 							<option value="3" <?php if (isset($goal)&&$goal['goalTypeId']==3) echo "selected";?> data-icon="<?php echo base_url(); ?>images/social.png" class="left circle">Social</option>
-							<option value="4" <?php if (isset($goal)&&$goal['goalTypeId']==4) echo "selected";?> data-icon="<?php echo base_url(); ?>images/sports.png" class="left circle">Sports</option>
+							<option value="4" <?php if (isset($goal)&&$goal['goalTypeId']==4) echo "selected";?> data-icon="<?php echo base_url(); ?>images/sport.png" class="left circle">Sports</option>
 							<option value="5" <?php if (isset($goal)&&$goal['goalTypeId']==5) echo "selected";?> data-icon="<?php echo base_url(); ?>images/professional.png" class="left circle">Professional</option>
 							<option value="6" <?php if (isset($goal)&&$goal['goalTypeId']==6) echo "selected";?> data-icon="<?php echo base_url(); ?>images/personal.png" class="left circle">Personal</option>
 						</select>
@@ -63,7 +63,7 @@
 						<input name="finishing_date" value="<?php if(isset($goal)) echo  date("d F, Y",strtotime($goal['finishingDate']));else echo mdate("%d %F, %Y",time()); ?>" type="date" class="datepicker" id="goal_endDate">
 					</div>
 				</div>
-				<div class="row ">
+				<div class="row center">
 					<div class="col s6 ">
 						<input name="is_completed" type="checkbox" id="is_completed" <?php if (isset($goal)&&$goal['statusId']==3) echo "checked"; else echo "unchecked";?> />
 						<label for="is_completed">Completed</label>
