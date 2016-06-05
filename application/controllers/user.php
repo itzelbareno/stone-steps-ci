@@ -25,6 +25,8 @@
 				$data['listGoals'][$i]['id'] = $listGoals[$i]['id'];
 				$data['listGoals'][$i]['statusId'] = $listGoals[$i]['statusId'];
 			}
+
+			$data['nf_user'] = $this->model->getNewsFeedFromUser($_SESSION['user']['id']);
 						
 			$data['content'] = 'user';			
 			$this->load->view('structure/template', $data);
@@ -56,7 +58,10 @@
 			$isFollowing = $this->model->isFollowing($userId);
 			$data['isFollowing'] = $isFollowing;
 			
-			$data['content'] = 'user';			
+			$data['content'] = 'user';
+
+			$data['nf_user'] = $this->model->getNewsFeedFromUser($userId);
+
 			$this->load->view('structure/template', $data);
 		}
 		

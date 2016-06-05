@@ -3,16 +3,13 @@
 
 	class Home extends CI_Controller {
 
-		public function index()
-		{
+		public function index() {
+			$data['nf_following'] = $this->model->getNewsFeedFollowing();
+			for($i=1;$i<=6;$i++){
+				$data['nf_category'][$i] = $this->model->getNewsFeedByCategory($i);	
+			}
 			$data['content'] = 'home';
 			$this->load->view('structure/template', $data);
-		}
-
-		function goalone($goalId = "") {
-			//Preparar información del objetivo
-			$data['content']='goal';
-			$this->load->view('structure/template',$data);
 		}
 	}
 ?>

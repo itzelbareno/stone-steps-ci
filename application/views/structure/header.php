@@ -18,6 +18,7 @@
     <?php if($content != 'login' && $content != 'signup'): ?>
         <ul id="dropdown1" class="dropdown-content">
             <li><a class="dark-primary-text" href="<?php echo base_url(); ?>following">Following</a></li>
+            <li><a class="dark-primary-text" href="<?php echo base_url(); ?>goal">Add a Goal</a></li>
             <li class="divider"></li>
             <li><a class="dark-primary-text" href="<?php echo base_url(); ?>logout">Log Out</a></li>
         </ul>
@@ -25,7 +26,7 @@
         <div class="navbar-fixed z-depth-1">
          <nav role="navigation">
           <div class="nav-wrapper container">
-            <a href="index.php" class="brand-logo"><b>Stone</b>Steps</a>
+            <a href="<?php echo base_url(); ?>" class="brand-logo"><b>Stone</b>Steps</a>
             <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
               <li><form>
@@ -70,6 +71,15 @@
                     </div>
                     <div class="col s8">
                         <span class="box-title"><a href="<?php echo base_url(); ?>following">Following</a></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col s3 offset-s1">
+                        <span class="text"><i class="material-icons">add</i></span>
+                    </div>
+                    <div class="col s8">
+                        <span class="box-title"><a href="<?php echo base_url(); ?>goal">Add a goal</a></span>
                     </div>
                 </div>
 

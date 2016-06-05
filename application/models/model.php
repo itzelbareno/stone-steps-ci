@@ -6,6 +6,7 @@
 		}
 
 		//LOGIN, SIGNUP, HEADER
+
 		//Devuelve True si el usuario fue dado de alta exitosamente.
 		//Devuelve el error si no se pudo dar de alta al usuario.
 		//userData['first_name']
@@ -109,8 +110,17 @@
 		}
 
 		function startFollowing($userId){
-			$this->db->insert('following',array('user_id'=>$_SESSION['user']['id'],'user_following_id'=>$userId));
-			return true;
+			if($this->db->insert('following',array('user_id'=>$_SESSION['user']['id'],'user_following_id'=>$userId))) {
+				$newsFeed['news_type_id'] = 5;
+				$newsFeed['user_id'] = $_SESSION['user']['id'];
+				$newsFeed['object_id'] = $userId;
+				$this->load->helper('date');
+				$newsFeed['created_date'] = mdate("%Y-%m-%d",time());
+				$this->addNewsFeed($newsFeed);
+				return true;
+			}
+			else
+				return false;
 		}
 
 		function stopFollowing($userId){
@@ -277,7 +287,7 @@
 		}
 
 		function getMilestones($goalId){
-			$milestones = $this->db->where(array('goal_id'=>$goalId))->get('milestones')->result();
+			$milestones = $this->db->where(array('goal_id'=>$goalId, 'status_id !='=>0))->get('milestones')->result();
 			for($i=0; sizeof($milestones)>0 && $i<sizeof($milestones) ;$i++){
 				$data[$i]['id']=$milestones[$i]->milestone_id;
 				$data[$i]['goalId']=$milestones[$i]->goal_id;
@@ -311,6 +321,17 @@
 
 		function getCategoryName($category){
 			return $this->db->where(array('type_id'=>$category))->get('goal_type')->row()->name;
+		}
+
+		function getCategory($categoryId){
+			$type = $this->db->where(array('type_id'=>$categoryId))->get('goal_type')->row();
+			if($type!=false){
+				$category['id'] = $type->type_id;
+				$category['name'] = $type->name;
+				$category['picture'] = $type->icon;
+				return $category;
+			}
+			return false;
 		}
 
 		function getStatusName($status){
@@ -400,7 +421,6 @@
 
 		function addGoalPicture($data){
 			$data['name'] = $this->uploadGoalPicture($data['name'],$data['goal_id']);
-			
 			if($this->db->insert('goals_pictures',$data)) {
 				$newPictureId = $this->db->insert_id();
 				$newsFeed['news_type_id'] = 4;
@@ -422,16 +442,14 @@
 		}
 
 		function deleteGoalPicture($pictureId){
-			//baja logica
 			$data['goal_id'] = 0;
-			$this->db->where(array('picture_id'=>$pictureId))->update('goals_pictures',$data);	
+			$this->db->where(array('picture_id'=>$pictureId))->update('goals_pictures',$data);
 			return true;
 		}
 
 		function uploadGoalPicture($picture, $goalId){
 			$id = $this->db->select_max('picture_id')->get('goals_pictures')->row()->picture_id;
 			$id++;
-			//$id = sizeof($this->db->where(array('goal_id'=>$goalId))->get('goals_pictures')->result());
 			$dir="./images/goals/";            
 			$type = explode('/',$picture['type']);
 			$type = $type[1];
@@ -443,7 +461,6 @@
 			$config['file_name']=$name;
 			$this->load->library('upload',$config);
             $this->upload->initialize($config);
-			
 			if(!$this->upload->do_upload('name')){
 				echo $this->upload->display_errors();
 				return false;
@@ -469,18 +486,19 @@
 			$c = 0;
 			for($i=0; sizeof($following)>0 && $i<sizeof($following); $i++){
 				$followingNews = $this->getNewsFeedFromUser($following[$i]['id']);
-				for($j=0; sizeof($followingNews)>0 && $j<sizeof($followingNews); $j++){
+				for($j=0; $followingNews!=false && $j<sizeof($followingNews); $j++){
 					$data[$c] = $followingNews[$j];
 					$c++;
 				} 
 			}
-			if(sizeof($data)>0){
+			if(isset($data)){
 				return $data;
 			}
 			else{
 				return false;
 			}
 		}
+
 
 		function getNewsFeedFromUser($userId){
 			$newsFeed = $this->db->where(array('user_id'=>$userId))->get('news_feed')->result();
@@ -492,14 +510,20 @@
 						$user = $this->getUser($item->user_id);
 						$data[$i]['id'] = $item->news_feed_id;
 						$data[$i]['type'] = 0;
-						$data[$i]['date'] = $item->creation_date;
-						$data[$i]['userName'] = $user['name'];
+						$date = timespan(strtotime($item->created_date), now()) . ' ago';
+						$date = explode(',', $date)[0];
+						$data[$i]['date'] = $date.' ago';
+						$data[$i]['userName'] = $user['firstName'].' '.$user['lastName'];
 						$data[$i]['userId'] = $user['id'];
+						$data[$i]['userPicture'] = $user['picture'];
 						$data[$i]['goalId'] = $goal['id'];
 						$data[$i]['goalTitle'] = $goal['title'];
-						$data[$i]['goalStatus'] = $this->getStatusName($goal['status']);
+						$data[$i]['goalStatus'] = $this->getStatusName($goal['statusId']);
 						$data[$i]['goalDescription'] = $goal['description'];
-						$data[$i]['goalDeadline'] = $goal['deadline'];
+						$data[$i]['goalDeadline'] = $goal['finishingDate'];
+						$category = $this->getCategory($goal['goalTypeId']);
+						$data[$i]['categoryName'] = $category['name'];
+						$data[$i]['categoryPicture'] = $category['picture'];
 					break;
 
 					case 1: //created milestone
@@ -508,15 +532,21 @@
 						$user = $this->getUser($item->user_id);
 						$data[$i]['id'] = $item->news_feed_id;
 						$data[$i]['type'] = 1;
-						$data[$i]['date'] = $item->creation_date;
-						$data[$i]['userName'] = $user['name'];
+						$date = timespan(strtotime($item->created_date), now()) . ' ago';
+						$date = explode(',', $date)[0];
+						$data[$i]['date'] = $date.' ago';
+						$data[$i]['userName'] = $user['firstName'].' '.$user['lastName'];
 						$data[$i]['userId'] = $user['id'];
+						$data[$i]['userPicture'] = $user['picture'];
 						$data[$i]['goalId'] = $goal['id'];
 						$data[$i]['goalTitle'] = $goal['title'];
-						$data[$i]['goalStatus'] = $this->getStatusName($goal['status']);
+						$data[$i]['goalStatus'] = $this->getStatusName($goal['statusId']);
 						$data[$i]['milestoneTitle'] = $milestone['title'];
 						$data[$i]['milestoneStatus'] = $this->getStatusName($milestone['status']);
-						$data[$i]['goalDeadline'] = $goal['deadline'];
+						$data[$i]['goalDeadline'] = $goal['finishingDate'];
+						$category = $this->getCategory($goal['goalTypeId']);
+						$data[$i]['categoryName'] = $category['name'];
+						$data[$i]['categoryPicture'] = $category['picture'];
 					break;
 
 					case 2: //updated goal status
@@ -524,13 +554,19 @@
 						$user = $this->getUser($item->user_id);
 						$data[$i]['id'] = $item->news_feed_id;
 						$data[$i]['type'] = 2;
-						$data[$i]['date'] = $item->creation_date;
-						$data[$i]['userName'] = $user['name'];
+						$date = timespan(strtotime($item->created_date), now()) . ' ago';
+						$date = explode(',', $date)[0];
+						$data[$i]['date'] = $date.' ago';
+						$data[$i]['userName'] = $user['firstName'].' '.$user['lastName'];
 						$data[$i]['userId'] = $user['id'];
+						$data[$i]['userPicture'] = $user['picture'];
 						$data[$i]['goalId'] = $goal['id'];
 						$data[$i]['goalTitle'] = $goal['title'];
-						$data[$i]['goalStatus'] = $this->getStatusName($goal['status']);
-						$data[$i]['goalDeadline'] = $goal['deadline'];
+						$data[$i]['goalStatus'] = $this->getStatusName($goal['statusId']);
+						$data[$i]['goalDeadline'] = $goal['finishingDate'];
+						$category = $this->getCategory($goal['goalTypeId']);
+						$data[$i]['categoryName'] = $category['name'];
+						$data[$i]['categoryPicture'] = $category['picture'];
 					break;
 
 					case 3: //updated milestone status
@@ -539,15 +575,21 @@
 						$user = $this->getUser($item->user_id);
 						$data[$i]['id'] = $item->news_feed_id;
 						$data[$i]['type'] = 3;
-						$data[$i]['date'] = $item->creation_date;
-						$data[$i]['userName'] = $user['name'];
+						$date = timespan(strtotime($item->created_date), now()) . ' ago';
+						$date = explode(',', $date)[0];
+						$data[$i]['date'] = $date.' ago';
+						$data[$i]['userName'] = $user['firstName'].' '.$user['lastName'];
 						$data[$i]['userId'] = $user['id'];
+						$data[$i]['userPicture'] = $user['picture'];
 						$data[$i]['goalId'] = $goal['id'];
 						$data[$i]['goalTitle'] = $goal['title'];
-						$data[$i]['goalStatus'] = $this->getStatusName($goal['status']);
+						$data[$i]['goalStatus'] = $this->getStatusName($goal['statusId']);
 						$data[$i]['milestoneTitle'] = $milestone['title'];
 						$data[$i]['milestoneStatus'] = $this->getStatusName($milestone['status']);
-						$data[$i]['goalDeadline'] = $goal['deadline'];
+						$data[$i]['goalDeadline'] = $goal['finishingDate'];
+						$category = $this->getCategory($goal['goalTypeId']);
+						$data[$i]['categoryName'] = $category['name'];
+						$data[$i]['categoryPicture'] = $category['picture'];
 					break;
 
 					case 4: //added picture
@@ -556,16 +598,22 @@
 						$user = $this->getUser($item->user_id);
 						$data[$i]['id'] = $item->news_feed_id;
 						$data[$i]['type'] = 4;
-						$data[$i]['date'] = $item->creation_date;
-						$data[$i]['userName'] = $user['name'];
+						$date = timespan(strtotime($item->created_date), now()) . ' ago';
+						$date = explode(',', $date)[0];
+						$data[$i]['date'] = $date.' ago';
+						$data[$i]['userName'] = $user['firstName'].' '.$user['lastName'];
 						$data[$i]['userId'] = $user['id'];
+						$data[$i]['userPicture'] = $user['picture'];
 						$data[$i]['goalId'] = $goal['id'];
 						$data[$i]['goalTitle'] = $goal['title'];
-						$data[$i]['goalStatus'] = $this->getStatusName($goal['status']);
+						$data[$i]['goalStatus'] = $this->getStatusName($goal['statusId']);
 						$data[$i]['goalDeadline'] = $goal['deadline'];
 						$data[$i]['pictureName'] = $picture['name'];
 						$data[$i]['pictureId'] = $picture['id'];
 						$data[$i]['pictureCaption'] = $picture['caption'];
+						$category = $this->getCategory($goal['goalTypeId']);
+						$data[$i]['categoryName'] = $category['name'];
+						$data[$i]['categoryPicture'] = $category['picture'];
 					break;
 
 					case 5: //user started following
@@ -573,10 +621,14 @@
 						$user = $this->getUser($item->user_id);
 						$data[$i]['id'] = $item->news_feed_id;
 						$data[$i]['type'] = 5;
-						$data[$i]['date'] = $item->creation_date;
-						$data[$i]['userName'] = $user['name'];
+						$date = timespan(strtotime($item->created_date), now()) . ' ago';
+						$date = explode(',', $date)[0];
+						$data[$i]['date'] = $date.' ago';
+						$data[$i]['userName'] = $user['firstName'].' '.$user['lastName'];
 						$data[$i]['userId'] = $user['id'];
-						$data[$i]['followingName'] = $following['firstName'].' '.$following['lastName'];
+						$data[$i]['userPicture'] = $user['picture'];
+						$data[$i]['followingName'] = $following['firstName'].' '.$following['middleName'].' '.$following['lastName'];
+						$data[$i]['followingPicture'] = $following['picture'];
 						$data[$i]['followingId'] = $following['id'];
 					break;
 				}
@@ -588,126 +640,150 @@
 				return false;
 		}
 
-		function getNewsFeedByCategory($category){
+		function getNewsFeedByCategory($categoryId){
 
 			//Created goal
 			$this->db->select('nf.news_feed_id as news_feed_id, 
 							   nf.news_type_id as news_type_id, 
-							   nf.creation_date as creation_date, 
+							   nf.created_date as created_date, 
 							   nf.object_id as object_id, 
 							   nf.user_id as user_id');
 	        $this->db->from('news_feed AS nf');
 	        $this->db->join('users','nf.user_id=users.user_id');
 	        $this->db->join('goals','nf.object_id=goals.goal_id');
-	        $newsFeed = $this->db->where(array('nf.news_type_id'=>0, 'goals.goal_type_id'=>$category))->get()->result();
+	        $newsFeed = $this->db->where(array('nf.news_type_id'=>0, 'goals.goal_type_id'=>$categoryId))->get()->result();
 	        for($i=0; sizeof($newsFeed)>0 && $i<sizeof($newsFeed) ;$i++){
 	        	$item = $newsFeed[$i];
 	        	$goal = $this->getGoal($item->object_id);
 				$user = $this->getUser($item->user_id);
 				$data[$i]['id'] = $item->news_feed_id;
 				$data[$i]['type'] = $item->news_type_id;
-				$data[$i]['date'] = $item->creation_date;
-				$data[$i]['userName'] = $user['name'];
+				$date = timespan(strtotime($item->created_date), now()) . ' ago';
+				$date = explode(',', $date)[0];
+				$data[$i]['date'] = $date.' ago';
+				$data[$i]['userName'] = $user['firstName'].' '.$user['lastName'];
 				$data[$i]['userId'] = $user['id'];
+				$data[$i]['userPicture'] = $user['picture'];
 				$data[$i]['goalId'] = $goal['id'];
 				$data[$i]['goalTitle'] = $goal['title'];
-				$data[$i]['goalStatus'] = $this->getStatusName($goal['status']);
+				$data[$i]['goalStatus'] = $this->getStatusName($goal['statusId']);
 				$data[$i]['goalDescription'] = $goal['description'];
-				$data[$i]['goalDeadline'] = $goal['deadline'];
+				$data[$i]['goalDeadline'] = $goal['finishingDate'];
+				$category = $this->getCategory($goal['goalTypeId']);
+				$data[$i]['categoryName'] = $category['name'];
+				$data[$i]['categoryPicture'] = $category['picture'];
 	        }
 
 	        //Created milestone
 			$this->db->select('nf.news_feed_id as news_feed_id, 
 							   nf.news_type_id as news_type_id, 
-							   nf.creation_date as creation_date, 
+							   nf.created_date as created_date, 
 							   nf.object_id as object_id, 
 							   nf.user_id as user_id');
 	        $this->db->from('news_feed AS nf');
 	        $this->db->join('users','nf.user_id=users.user_id');
 	        $this->db->join('milestones','nf.object_id=milestones.milestone_id');
 	        $this->db->join('goals','nf.object_id=milestones.goal_id');
-	        $newsFeed = $this->db->where(array('nf.news_type_id'=>1, 'goals.goal_type_id'=>$category))->get()->result();
+	        $newsFeed = $this->db->where(array('nf.news_type_id'=>1, 'goals.goal_type_id'=>$categoryId))->get()->result();
 	        for($i=0; sizeof($newsFeed)>0 && $i<sizeof($newsFeed) ;$i++){
 	        	$milestone = $this->getMilestone($item->object_id);
 				$goal = $this->getGoal($milestone['goal_id']);
 				$user = $this->getUser($item->user_id);
 				$data[$i]['id'] = $item->news_feed_id;
 				$data[$i]['type'] = $item->news_type_id;
-				$data[$i]['date'] = $item->creation_date;
-				$data[$i]['userName'] = $user['name'];
+				$date = timespan(strtotime($item->created_date), now()) . ' ago';
+				$date = explode(',', $date)[0];
+				$data[$i]['date'] = $date.' ago';
+				$data[$i]['userName'] = $user['firstName'].' '.$user['lastName'];
+				$data[$i]['userPicture'] = $user['picture'];
 				$data[$i]['userId'] = $user['id'];
 				$data[$i]['goalId'] = $goal['id'];
 				$data[$i]['goalTitle'] = $goal['title'];
-				$$data[$i]['goalStatus'] = $this->getStatusName($goal['status']);
+				$data[$i]['goalStatus'] = $this->getStatusName($goal['statusId']);
 				$data[$i]['milestoneTitle'] = $milestone['title'];
-				$data[$i]['goalDeadline'] = $goal['deadline'];
+				$data[$i]['goalDeadline'] = $goal['finishingDate'];
+				$category = $this->getCategory($goal['goalTypeId']);
+				$data[$i]['categoryName'] = $category['name'];
+				$data[$i]['categoryPicture'] = $category['picture'];
 	        }
 
 	        //Updated goal status
 	        $this->db->select('nf.news_feed_id as news_feed_id, 
 							   nf.news_type_id as news_type_id, 
-							   nf.creation_date as creation_date, 
+							   nf.created_date as created_date, 
 							   nf.object_id as object_id, 
 							   nf.user_id as user_id');
 	        $this->db->from('news_feed AS nf');
-	        $this->db->join('users','nf.user_id=u.user_id');
-	        $this->db->join('goals','nf.object_id=g.goal_id');
-	        $newsFeed = $this->db->where(array('nf.news_type_id'=>2, 'goals.goal_type_id'=>$category))->get()->result();
+	        $this->db->join('users','nf.user_id=users.user_id');
+	        $this->db->join('goals','nf.object_id=goals.goal_id');
+	        $newsFeed = $this->db->where(array('nf.news_type_id'=>2, 'goals.goal_type_id'=>$categoryId))->get()->result();
 	        for($i=0; sizeof($newsFeed)>0 && $i<sizeof($newsFeed) ;$i++){
 	        	$item = $newsFeed[$i];
 	        	$goal = $this->getGoal($item->object_id);
 				$user = $this->getUser($item->user_id);
 				$data[$i]['id'] = $item->news_feed_id;
 				$data[$i]['type'] = $item->news_type_id;
-				$data[$i]['date'] = $item->creation_date;
-				$data[$i]['userName'] = $user['name'];
+				$date = timespan(strtotime($item->created_date), now()) . ' ago';
+				$date = explode(',', $date)[0];
+				$data[$i]['date'] = $date.' ago';
+				$data[$i]['userName'] = $user['firstName'].' '.$user['lastName'];
 				$data[$i]['userId'] = $user['id'];
+				$data[$i]['userPicture'] = $user['picture'];
 				$data[$i]['goalId'] = $goal['id'];
 				$data[$i]['goalTitle'] = $goal['title'];
-				$data[$i]['goalStatus'] = $this->getStatusName($goal['status']);
+				$data[$i]['goalStatus'] = $this->getStatusName($goal['statusId']);
 				$data[$i]['goalDescription'] = $goal['description'];
-				$data[$i]['goalDeadline'] = $goal['deadline'];
+				$data[$i]['goalDeadline'] = $goal['finishingDate'];
+				$category = $this->getCategory($goal['goalTypeId']);
+				$data[$i]['categoryName'] = $category['name'];
+				$data[$i]['categoryPicture'] = $category['picture'];
 	        }
 
 	        //Updated milestone status
 	        $this->db->select('nf.news_feed_id as news_feed_id, 
 							   nf.news_type_id as news_type_id, 
-							   nf.creation_date as creation_date, 
+							   nf.created_date as created_date, 
 							   nf.object_id as object_id, 
 							   nf.user_id as user_id');
 	        $this->db->from('news_feed AS nf');
 	        $this->db->join('users','nf.user_id=users.user_id');
 	        $this->db->join('milestones','nf.object_id=milestones.milestone_id');
 	        $this->db->join('goals','nf.object_id=milestones.goal_id');
-	        $newsFeed = $this->db->where(array('nf.news_type_id'=>3, 'goals.goal_type_id'=>$category))->get()->result();
+	        $newsFeed = $this->db->where(array('nf.news_type_id'=>3, 'goals.goal_type_id'=>$categoryId))->get()->result();
 	        for($i=0; sizeof($newsFeed)>0 && $i<sizeof($newsFeed) ;$i++){
 	        	$milestone = $this->getMilestone($item->object_id);
 				$goal = $this->getGoal($milestone['goal_id']);
 				$user = $this->getUser($item->user_id);
 				$data[$i]['id'] = $item->news_feed_id;
 				$data[$i]['type'] = $item->news_type_id;
-				$data[$i]['date'] = $item->creation_date;
-				$data[$i]['userName'] = $user['name'];
+				$date = timespan(strtotime($item->created_date), now()) . ' ago';
+				$date = explode(',', $date)[0];
+				$data[$i]['date'] = $date.' ago';
+				$data[$i]['userName'] = $user['firstName'].' '.$user['lastName'];
 				$data[$i]['userId'] = $user['id'];
+				$data[$i]['userPicture'] = $user['picture'];
 				$data[$i]['goalId'] = $goal['id'];
 				$data[$i]['goalTitle'] = $goal['title'];
-				$data[$i]['goalStatus'] = $this->getStatusName($goal['status']);
+				$data[$i]['goalStatus'] = $this->getStatusName($goal['statusId']);
 				$data[$i]['milestoneTitle'] = $milestone['title'];
 				$data[$i]['milestoneStatus'] = $this->getStatusName($milestone['status']);
-				$data[$i]['goalDeadline'] = $goal['deadline'];
+				$data[$i]['goalDeadline'] = $goal['finishingDate'];
+				$category = $this->getCategory($goal['goalTypeId']);
+				$data[$i]['categoryName'] = $category['name'];
+				$data[$i]['categoryPicture'] = $category['picture'];
 	        }
 
 	        //Added picture
 	        $this->db->select('nf.news_feed_id as news_feed_id, 
 							   nf.news_type_id as news_type_id, 
-							   nf.creation_date as creation_date, 
+							   nf.created_date as created_date, 
 							   nf.object_id as object_id, 
 							   nf.user_id as user_id');
 	        $this->db->from('news_feed AS nf');
-	        $this->db->join('users','nf.user_id=u.user_id');
+	        $this->db->join('users','nf.user_id=users.user_id');
 	        $this->db->join('goals_pictures','nf.object_id=goals_pictures.picture_id');
 	        $this->db->join('goals','goals_pictures.goal_id=goals.goal_id');
-	        $newsFeed = $this->db->where(array('nf.news_type_id'=>4, 'goals.goal_type_id'=>$category))->get()->result();
+	        $newsFeed = $this->db->where(array('nf.news_type_id'=>4, 'goals.goal_type_id'=>$categoryId))->get()->result();
 	        for($i=0; sizeof($newsFeed)>0 && $i<sizeof($newsFeed) ;$i++){
 	        	$item = $newsFeed[$i];
 	        	$picture = $this->getPicture($item->object_id);
@@ -715,25 +791,32 @@
 				$user = $this->getUser($item->user_id);
 				$data[$i]['id'] = $item->news_feed_id;
 				$data[$i]['type'] = $item->news_type_id;
-				$data[$i]['date'] = $item->creation_date;
-				$data[$i]['userName'] = $user['name'];
+				$date = timespan(strtotime($item->created_date), now()) . ' ago';
+				$date = explode(',', $date)[0];
+				$data[$i]['date'] = $date.' ago';
+				$data[$i]['userName'] = $user['firstName'].' '.$user['lastName'];
 				$data[$i]['userId'] = $user['id'];
+				$data[$i]['userPicture'] = $user['picture'];
 				$data[$i]['goalId'] = $goal['id'];
 				$data[$i]['goalTitle'] = $goal['title'];
-				$data[$i]['goalStatus'] = $this->getStatusName($goal['status']);
+				$data[$i]['goalStatus'] = $this->getStatusName($goal['statusId']);
 				$data[$i]['goalDeadline'] = $goal['deadline'];
 				$data[$i]['pictureName'] = $picture['name'];
 				$data[$i]['pictureId'] = $picture['id'];
 				$data[$i]['pictureCaption'] = $picture['caption'];
+				$category = $this->getCategory($goal['goalTypeId']);
+				$data[$i]['categoryName'] = $category['name'];
+				$data[$i]['categoryPicture'] = $category['picture'];
 	        }
 			
-			if(sizeof($data)>0)
+			if(isset($data)>0)
 				return $data;
 			else
 				return false;
 		}
 
 		function addNewsFeed($data){
+
 			$this->db->insert('news_feed',$data);
 			return true;
 		}

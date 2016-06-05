@@ -142,17 +142,18 @@ span.box-title a{
 }
 
 span.box-time{
+  font-weight: 400;
 	color: #b6b6b6;
 }
 
 
 span.box-content{
-	color: #212121;
+  font-weight: 400;
+  color: #212121;
 }
 
-span.box-content a{
-	font-weight: 500;
-	color: #212121;
+span.box-content b{
+  font-weight: 500; 
 }
 
 /**
