@@ -9,45 +9,114 @@
 		<div class="col s12 m4">
 			<div class="container-90">
 				<div class="row center-align">
-					<img class="goal-picture user" src="<?php echo base_url(); ?>images/arts.png">
+					<?php 
+					switch($goalInfo['goalTypeId']){
+						case 1: //Arts?>
+							<img class="goal-picture user" src="<?php echo base_url(); ?>images/art.png"><?php
+							break;
+						case 2: //Knowledge?>
+							<img class="goal-picture user" src="<?php echo base_url(); ?>images/knowledge.png"><?php
+							break;
+						case 3: //Social?>
+							<img class="goal-picture user" src="<?php echo base_url(); ?>images/social.png"><?php
+							break;
+						case 4: //Sport?>
+							<img class="goal-picture user" src="<?php echo base_url(); ?>images/sport.png"><?php
+							break;
+						case 5: //Professional?>
+							<img class="goal-picture user" src="<?php echo base_url(); ?>images/professional.png"><?php
+							break;
+						case 6: //Personal?>
+							<img class="goal-picture user" src="<?php echo base_url(); ?>images/personal.png"><?php
+							break;
+					}?>
 				</div>
 				
 				<div class="row center-align">
-					<span class="goal-title">Tocar Through the fire and flames en saxofón</span>
+					<span class="goal-title"><?php echo $goalInfo['title']; ?></span>
 				</div>
 				
 				<div class="row">
-					<span class="goal-content"><b>Status:</b> Completed</span>
+					<span class="goal-content"><b>Status: </b><?php echo $goalInfo['status']; ?></span>
 				</div>
 				
 				<div class="row">
-					Quiero tocar through the fire and flames en saxofón para un cover en mi canal de youtube.
+					<?php echo $goalInfo['description']; ?>
 				</div>
 
 				<div class="row">
-		           <span class="goal-content"><b>Start date:</b> 25/07/2016</span>
-		        </div>
-
-		        <div class="row">
-		          <span class="goal-content"><b>Finished date:</b> 25/07/2016</span>
-		        </div>
+					<span class="goal-content"><b>Start date: </b><?php echo date("d F, Y",strtotime($goalInfo['startDate'])); ?></span>
+				</div>
 
 				<div class="row">
-		          <span class="goal-content"><b>Last update:</b> 25/07/2016</span>
-		        </div>
-
-		        <div class="row">
-		        	<div class="collection">
-		        	<a href="#modal1" class="collection-item waves-effect waves-light modal-trigger data-target=modal1 secondary-text center">Add a New Milestone<span class="badge"></span></a>
-		        	<a href="#modal1" class="collection-item waves-effect waves-light modal-trigger data-target=modal1"><div class="col s9"><span class="text">Pagar el gym</span></div><div class="col s3"><span class="badge accent-text">Completed</span></div></a>
-					<a href="#modal1" class="collection-item waves-effect waves-light modal-trigger data-target=modal1"><div class="col s9"><span class="text">No dejar de ir por 3 meses</span></div><div class="col s3"><span class="badge primary-text">Idle</span></div></a>
-					<a href="#modal1" class="collection-item waves-effect waves-light modal-trigger data-target=modal1"><div class="col s9"><span class="text">Bajar 10 libras</span></div><div class="col s3"><span class="badge text">Going</span></div></a>
-		  	    	</div>
-		  	    </div>
-		  	</div>
+					<span class="goal-content">
+						<!-- 2 -> Pending // 3 -> Completed -->
+						<?php 
+						if($goalInfo['statusId'] == 2){?>
+							<b>Deadline: </b><?php echo date("d F, Y",strtotime($goalInfo['finishingDate'])); 
+						}
+						else if($goalInfo['statusId'] == 3){?>
+							<b>Finished Date: </b><?php echo date("d F, Y",strtotime($goalInfo['completedDate']));
+						}
+						?>
+					</span>
+				</div>
+			
+				<div class="row">
+					<span class="goal-content"><b>Last update: </b><?php echo date("d F, Y",strtotime($goalInfo['lastUpdateDate'])); ?></span>
+				</div>
+				
+				<?php 
+				if(isset($listMilestones) || $_SESSION['user']['id'] == $userId ) { ?>
+				<div class="row">
+					<div class="collection left-align">
+						<!-- Add a New Milestone -->
+						<?php 
+						if($_SESSION['user']['id'] == $userId ) { ?>
+						<a href="<?php echo base_url(); ?>goal/update_milestones/<?php $id; ?>" class="collection-item waves-effect waves-light modal-trigger data-target=modal1">
+							<div class="col s12 center"><span class="secondary-text">Add a New Milestone</span></div>
+						</a>
+						<?php 
+						}
+						?>
+						
+						<!-- Milestones List -->
+						<?php
+						if(isset($listMilestones)){
+							for($i=0; isset($listMilestones) && $i<sizeof($listMilestones);$i++){ ?>
+							<a href="#modal1" class="collection-item waves-effect waves-light modal-trigger data-target=modal1">
+								<div class="col s9">
+									<span class="text"><?php echo $listMilestones[$i]['title']; ?></span>
+								</div>
+								<div class="col s3">
+									<?php 
+									switch($listMilestones[$i]['statusId'])
+									{
+										case 2:?>
+											<span class="badge text">Pending</span><?php
+											break;
+										case 3:?>
+											<span class="badge accent-text">Completed</span><?php
+											break;
+									}
+									?>
+								</div>
+							</a>
+							<?php 
+							}
+						} 
+						?>
+						
+						
+					</div>
+				</div>
+				<?php
+        }
+        ?>
+			</div>
 		</div>
 
-		<!--Info general del objetivo -->
+		<!--Fotos de Objetivo-->
 		<div class="col s12 m8">
 			<div class="container">	
 				<div class="row">
@@ -250,6 +319,5 @@
 			</div>	
 		</div>
 
-
-	</div>
+	</div><!--Row General-->
 </div>

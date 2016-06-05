@@ -228,7 +228,7 @@
 
 		function getGoal($goalId){
 			$goal = $this->db->where(array('goal_id'=>$goalId))->get('goals')->row();
-			if(isset($goal->goal_id)){
+			if($goal!=false){
 				$data['id']=$goal->goal_id;
 				$data['title']=$goal->title;
 				$data['description']=$goal->description;
@@ -255,7 +255,7 @@
 				$data['goalId']=$milestone->goal_id;
 				$data['title']=$milestone->title;
 				$data['statusId']=$milestone->status_id;
-				$data['completedDate']=$milestone->completedDate;
+				$data['completedDate']=$milestone->completed_date;
 				return $data;
 			}
 			else{

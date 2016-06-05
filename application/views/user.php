@@ -37,17 +37,24 @@
         <br>
         
         <?php
-        if(isset($listGoals) || $_SESSION['user']['id'] == $id ) { ?>
+          if(isset($listGoals) || $_SESSION['user']['id'] == $id ) { ?>
           <div class="row">
             <div class="collection left-align">
+              <?php
+              if($_SESSION['user']['id'] == $id ) { ?>
+              <!-- Add New Goal -->
               <a href="<?php echo base_url(); ?>goal" class="collection-item waves-effect waves-light modal-trigger data-target=modal1">
                 <div class="col s12 center"><span class="secondary-text">Add new goal</span></div>
               </a>
+              <?php 
+              }
+              ?>
 
+              <!-- List of Goals -->
               <?php
               if(isset($listGoals)){
-                for($i=0; isset($listGoals) && $i<sizeof($listGoals);$i++){ ?>
-                  <a href="#modal1" class="collection-item waves-effect waves-light modal-trigger data-target=modal1">
+                for($i=0; isset($listGoals) && $i<sizeof($listGoals);$i++){ ?>                
+                  <a href="<?php echo base_url(); ?>goal/view/<?php echo $id; ?>/<?php echo $listGoals[$i]['id']; ?>" class="collection-item waves-effect waves-light modal-trigger data-target=modal1">
                     <div class="col s9">
                       <span class="text"><?php echo $listGoals[$i]['title']; ?></span>
                     </div>

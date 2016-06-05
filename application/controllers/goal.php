@@ -9,8 +9,25 @@
 			$this->load->view('structure/template',$data);
 		}
 
-		function view($goalId) {
+		function view($userId=0, $goalId=0) {
 			//Preparar información del objetivo
+			$data['userId'] = $userId;
+			$goalInfo = $this->model->getGoal($goalId);
+			$data['goalInfo'] = $goalInfo;
+			if($data['goalInfo']['statusId'] == 2){
+				$data['goalInfo']['status']	= 'Pending';	
+			}
+			else if($data['goalInfo']['statusId'] == 3){
+				$data['goalInfo']['status']	= 'Completed';	
+			}
+			
+			$listMilestones = $this->model->getMilestones($goalInfo['id']);		
+			for($i=0; $listMilestones!=false && $i<sizeof($listMilestones);$i++){
+				$data['listMilestones'][$i]['title'] = $listMilestones[$i]['title'];
+				$data['listMilestones'][$i]['id'] = $listMilestones[$i]['id'];
+				$data['listMilestones'][$i]['statusId'] = $listMilestones[$i]['statusId'];
+			}
+			
 			$data['content']='goal';
 			$this->load->view('structure/template',$data);
 		}
@@ -73,27 +90,6 @@
 				redirect(base_url().'goal/update_goal/'.$result);
 			}
 			
-		}
-		
-		function create_milestone($goalId){
-			$milestone['goal_id'] = $goalId;
-			$milestone['title'] = $_POST['milestone_title'];
-			if($_POST['is_completed'])
-				$milestone['status_id'] = 3;
-			else
-				$milestone['status_id'] = 2;
-			$milestone['completed_date'] = mdate("%Y-%m-%d",time());
-					
-			$result = $this->model->addMilestone($milestone);
-						
-			if($result === false){
-				$data['error']="Error: Could not create milestone at the moment, please try again later.";
-				$this->session->set_flashdata('error-milestone', $data);
-				redirect(base_url().'goal');
-			}
-			else{
-				redirect(base_url().'goal/update_milestones/'.$goalId);
-			}			
 		}
 
 
