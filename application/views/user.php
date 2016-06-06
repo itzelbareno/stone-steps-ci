@@ -323,7 +323,11 @@
       ?>
 
       <?php if($nf_user==false){ ?>
-        You should start making some friends...
+        <div class="row center">
+          <br><br><br><br>
+          <img src="<?php echo base_url();?>/images/trophy.png">
+          <h4 class="header center secondary-text col s12">You should consider adding some goals...</h4>
+        </div>
       <?php } ?>
     
       </div> <!-- Container2 -->
