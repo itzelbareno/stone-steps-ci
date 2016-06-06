@@ -35,19 +35,19 @@
 					<span class="goal-title"><?php echo $goalInfo['title']; ?></span>
 				</div>
 				
-				<div class="row">
+				<div class="row center-align">
 					<span class="goal-content"><b>Status: </b><?php echo $goalInfo['status']; ?></span>
 				</div>
 				
-				<div class="row">
+				<div class="row center-align">
 					<?php echo $goalInfo['description']; ?>
 				</div>
 
-				<div class="row">
+				<div class="row center-align">
 					<span class="goal-content"><b>Start date: </b><?php echo date("d F, Y",strtotime($goalInfo['startDate'])); ?></span>
 				</div>
 
-				<div class="row">
+				<div class="row center-align">
 					<span class="goal-content">
 						<!-- 2 -> Pending // 3 -> Completed -->
 						<?php 
@@ -61,16 +61,21 @@
 					</span>
 				</div>
 			
-				<div class="row">
+				<div class="row center-align">
 					<span class="goal-content"><b>Last update: </b><?php echo date("d F, Y",strtotime($goalInfo['lastUpdateDate'])); ?></span>
 				</div>
 				
 				<?php 
 				if(isset($listMilestones) || $_SESSION['user']['id'] == $userId ) {?> 
 				<div class="row"><!-- Row mediano -->
-					<div class="col s12 center"><!-- boton delete goal -->
-						<?php if($_SESSION['user']['id'] == $userId ) {?>					
+					<div class="col s12 center"><!-- boton edit|delete goal -->
+						<?php if($_SESSION['user']['id'] == $userId ) {?>
+						<div class="col s6">
+						<a href="<?php echo base_url(); ?>goal/update_goal/<?php echo $goalInfo['id']; ?>" class="waves-effect waves-light btn grey" method= "post">Edit Goal</a>
+						</div>
+						<div class="col s6">					
 						<a href="<?php echo base_url(); ?>goal/delete_goal/<?php echo $goalInfo['id']; ?>" class="waves-effect waves-light btn red" method= "post">Delete Goal</a>
+						</div>
 						<?php
 						}
 						?>
