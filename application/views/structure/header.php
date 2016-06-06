@@ -18,7 +18,7 @@
     <?php if($content != 'login' && $content != 'signup'): ?>
         <ul id="dropdown1" class="dropdown-content">
             <li><a class="dark-primary-text" href="<?php echo base_url(); ?>following">Following</a></li>
-            <li><a class="dark-primary-text" href="<?php echo base_url(); ?>goal">Add a Goal</a></li>
+            <li><a class="dark-primary-text" href="<?php echo base_url(); ?>goal">+ Goal</a></li>
             <li class="divider"></li>
             <li><a class="dark-primary-text" href="<?php echo base_url(); ?>logout">Log Out</a></li>
         </ul>
@@ -28,18 +28,20 @@
           <div class="nav-wrapper container">
             <a href="<?php echo base_url(); ?>" class="brand-logo"><b>Stone</b>Steps</a>
             <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+            
             <ul class="right hide-on-med-and-down">
-              <li><form>
+              <li><form method="post" enctype="multipart/form-data" action="<?php echo base_url();?>search/">
                 <div class="input-field">
-                  <input id="search" type="search" required>
+                  <input name="name" id="search" type="search" required>
                   <label for="search"><i class="material-icons">search</i></label>
                   <i class="material-icons">close</i>
                 </div>
               </form></li>
               <li class="user-name"><a href="<?php echo base_url(); ?>user"><?php echo $_SESSION['user']['firstName'];?></a></li>
               <li><img class="circle responsive-img user-profile" src="<?php echo base_url(); ?>images/users/<?php echo $_SESSION['user']['picture']; ?>"></li>
-              <li><a class="dropdown-button" href="#!" data-activates="dropdown1"><i class="material-icons right">arrow_drop_down</i></a></li>
+              <li><a class="dropdown-button" href="#!" data-activates="dropdown1"><i class="large material-icons">arrow_drop_down</i></a></li>
             </ul>
+            
             <ul class="side-nav" id="mobile-demo">
                 <div class="row">
                     <div class="col s12">

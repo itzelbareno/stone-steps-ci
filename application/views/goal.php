@@ -183,7 +183,16 @@
 							</div>
 						</div>
 						<div class="col s0 m1 l0 center "><br></div>
-					<?php } ?>
+					<?php } 
+					if(!isset($goalPictures[$i]['name'])){?>
+						<div class="row center">
+							<br><br><br><br>
+							<img src="<?php echo base_url();?>/images/addphoto.png">
+							<h4 class="header center secondary-text col s12">You should consider adding some photos...</h4>
+						</div>
+					<?php
+					}
+					?>
 				</div>
 			</div>	
 		</div>

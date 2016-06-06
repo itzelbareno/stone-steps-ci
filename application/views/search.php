@@ -39,8 +39,13 @@
 	<?php 
 			}
 		}
-		else{
-			echo 'No results found...';
+		else{?>
+			<div class="row center">
+				<br><br>
+				<img src="<?php echo base_url();?>/images/notfound.png">
+				<h1 class="header center secondary-text col s12">No results found.</h1>
+			</div>
+		<?php
 		}
 	?>
 

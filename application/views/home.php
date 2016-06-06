@@ -253,7 +253,11 @@
 				?>
 
 				<?php if($nf_following==false){ ?>
-					You should start making some friends...
+					<div class="row center">
+						<br><br>
+						<img src="<?php echo base_url();?>/images/follow.png">
+						<h1 class="header center secondary-text col s12">You should consider following someone...</h1>
+					</div>
 				<?php } ?>
 
 	    </div>
@@ -455,7 +459,11 @@
 					?>
 
 					<?php if($nf_category[$j]==false){ ?>
-						You should start making some friends...
+						<div class="row center">
+							<br><br>
+							<img src="<?php echo base_url();?>/images/newsfeed.png">
+							<h1 class="header center secondary-text col s12">There is no newsfeed for this category.</h1>
+						</div>
 					<?php } ?>
 	    	</div>
 	    <?php } ?>

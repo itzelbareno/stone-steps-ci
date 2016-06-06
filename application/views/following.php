@@ -6,13 +6,11 @@
 
 	<?php 
 		if($following!=false){
-			for($i=0;$i<sizeof($following);$i++) {
+			for($i=0;$i<sizeof($following);$i++) {?>
 
-	?>
-
-		<?php if($i%2==0){ ?>
-			<div class="row">
-		<?php } ?>
+			<?php if($i%2==0){ ?>
+				<div class="row">
+			<?php } ?>
 
 		<div class="col s12 m6">
 			<div class="card-panel grey lighten-5 z-depth-1">
@@ -39,8 +37,14 @@
 	<?php 
 			}
 		}
-		else{
-			echo 'You should make some friends...';
+		else{?>
+			
+		<div class="row center">
+			<br><br>
+			<img src="<?php echo base_url();?>/images/follow.png">
+			<h1 class="header center secondary-text col s12">You should consider following someone...</h1>
+		</div>
+		<?php
 		}
 	?>
 
