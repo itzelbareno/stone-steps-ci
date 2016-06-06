@@ -177,9 +177,14 @@
 								<div class="row center-align">
 									<label class ="dark-primary-text">"<?php echo $goalPictures[$i]['caption'];?>"</label>
 								</div>
+								<?php
+								if($_SESSION['user']['id'] != $userId){?>
 								<div class="row center-align">
-								<a href="#modal<?php echo $i;?>" id="create-button" class="btn-main dark-primary waves-effect waves-light modal-trigger data-target=modal<?php echo $i;?> offset-s3 offset-m3 offset-l3 col s6 m6 l6 ">Edit Photo</a>
+								<a href="#modal<?php echo $i;?>" id="create-button" class="btn-main dark-primary waves-effect waves-light modal-trigger data-target=modal<?php echo $i;?> offset-s3 offset-m3 offset-l3 col s6 m6 l6 ">Edit</a>
 								</div>
+								<?php
+								}
+								?>
 							</div>
 						</div>
 						<div class="col s0 m1 l0 center "><br></div>

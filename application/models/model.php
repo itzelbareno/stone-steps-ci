@@ -20,30 +20,24 @@
 				if($userData['picture'] == ""){
 					$userData['picture'] = 'avatar.png';
 				}
-				else{
-					$userData['picture'] = $this->uploadUserPicture($userData['picture']);
-				}
 				
-				if($userData['picture'] != false){
 					$id = $this->db->select_max('user_id')->get('users')->row()->user_id;
 					$id++;
 					$userData['user_id'] = $id;
-	            	$userData['password'] = sha1($userData['password']);
 	            	if($this->db->insert('users',$userData)){
-	                	if($this->logIn($userData['email'],$userData['password'])){
-	                		return true;
-	                	}
-	                	else
-	                		return "Your account was created successfully but you couldn't be logged in at the moment. Please try again later.";
+						return true;
                 	}
                 	else
                 		return "Your signup process couldn't be accomplished, please try again later.";
-            	}
-            	else
-            		return "Your picture couldn't be uploaded, please try again at another time.";
             }
             else
             	return 'That email account is already in use. Please try another one or log into that account.';
+		}
+		
+		function nextId(){
+			$id = $this->db->select_max('user_id')->get('users')->row()->user_id;
+			$id++;
+			return $id;
 		}
 
 		function logIn($user, $password) {
@@ -57,13 +51,34 @@
 				$data['lastName']= $user->last_name;
 				$data['email']= $user->email;
 				$data['picture']= $user->picture;
-				$this->setUser($data);
-				return true;
+				return $data;
 			}
 			else{
-				return "Wrong Email or Password, please try again.";
+				return false;
 			}
 		}
+		
+/*		
+		function logIn($user, $password) {
+			$where=array('email'=>$user,'password'=>$password);
+            $userResults = $this->db->where($where)->get('users');
+			if($userResults->num_rows()>0){
+                $user=$userResults->row();
+                $data['id']= $user->user_id;
+				$data['firstName']= $user->first_name;
+                $data['middleName']= $user->middle_name;
+				$data['lastName']= $user->last_name;
+				$data['email']= $user->email;
+				$data['password']=$user->password;
+				$data['picture']= $user->picture;
+				$this->setUser($data);
+				return $data;
+			}
+			else{
+				return false;
+			}
+		}
+*/
 
 		function logOut() {
 			session_destroy();
@@ -86,11 +101,11 @@
 			return $_SESSION['user']['picture'];
 		}
 
-		function getFollowing() {
+		function getFollowing($userId) {
 			$this->db->select('users.user_id as id,users.first_name as firstName,users.last_name as lastName, users.middle_name as middleName, users.picture as picture');
             $this->db->from('following');
             $this->db->join('users','users.user_id=following.user_following_id');
-            $usersResults = $this->db->where(array('following.user_id'=>$_SESSION['user']['id']))->get()->result();
+            $usersResults = $this->db->where(array('following.user_id'=>$userId))->get()->result();
             for($i=0; sizeof($usersResults)>0 && $i<sizeof($usersResults) ;$i++){
                 $users[$i]['id']= $usersResults[$i]->id;
                 $users[$i]['name']= $usersResults[$i]->firstName.' '.$usersResults[$i]->middleName.' '.$usersResults[$i]->lastName;
@@ -103,17 +118,17 @@
 				return false;	
 		}
 		
-		function isFollowing($user_id){
-			if(sizeof($this->db->where(array('user_id'=>$_SESSION['user']['id'],'user_following_id'=>$user_id))->get('following')->result())>0)
+		function isFollowing($userId,$userFollowId){
+			if(sizeof($this->db->where(array('user_id'=>$userId,'user_following_id'=>$userFollowId))->get('following')->result())>0)
 				return true;
 			return false;
 		}
 
-		function startFollowing($userId){
-			if($this->db->insert('following',array('user_id'=>$_SESSION['user']['id'],'user_following_id'=>$userId))) {
+		function startFollowing($userId,$userFollowId){
+			if($this->db->insert('following',array('user_id'=>$userId,'user_following_id'=>$userFollowId))) {
 				$newsFeed['news_type_id'] = 5;
-				$newsFeed['user_id'] = $_SESSION['user']['id'];
-				$newsFeed['object_id'] = $userId;
+				$newsFeed['user_id'] = $userId;
+				$newsFeed['object_id'] = $userFollowId;
 				$this->load->helper('date');
 				$newsFeed['created_date'] = mdate("%Y-%m-%d",time());
 				$this->addNewsFeed($newsFeed);
@@ -123,8 +138,8 @@
 				return false;
 		}
 
-		function stopFollowing($userId){
-			$this->db->where(array('user_id'=>$_SESSION['user']['id'],'user_following_id'=>$userId))->delete('following');
+		function stopFollowing($userId,$userFollowId){
+			$this->db->where(array('user_id'=>$userId,'user_following_id'=>$userFollowId))->delete('following');
 		}
 
 		function getCompletedGoals($userId){
@@ -135,115 +150,12 @@
 			return sizeof($this->db->where(array('user_id'=>$userId,'status_id'=>2))->get('goals')->result());
 		}
 
-		function uploadUserPicture($file){
-			$id = $this->db->select_max('user_id')->get('users')->row()->user_id;
-			$id++;
-
-			$dir="./images/users/";            
-			$type = explode('/',$file['type']);
-			$type = $type[1];
-			if($type == 'jpeg')
-				$type = 'jpg';
-			$name = $id.'.'.$type;
-			$config['upload_path']=$dir;
-			$config['allowed_types']='jpg|png';
-			$config['file_name']=$name;
-			$this->load->library('upload',$config);
-            $this->upload->initialize($config);
-            $this->upload->overwrite = true;
-			if(!$this->upload->do_upload('picture')){
-				echo $this->upload->display_errors();
-				return false;
-			}
-			else{
-				list($width, $height) = getimagesize($dir.''.$name);
-				$config['source_image']=$dir.''.$name;
-				$config['maintain_ratio']=FALSE;
-				if($width>$height){
-    				$config['width'] = $height;
-    				$config['height'] = $height;
-    				$config['x_axis'] = (($width / 2) - ($config['width'] / 2));
-				}
-				else{
-					$config['height'] = $width;
-    				$config['width'] = $width;
-   					$config['y_axis'] = (($height / 2) - ($config['height'] / 2));
-				}
-
-				$this->load->library('image_lib',$config);
-				$this->image_lib->initialize($config);
-				$this->image_lib->crop();
-
-				$config['source_image']=$dir.''.$name;
-				$config['maintain_ratio']=TRUE;
-				$config['width'] = 300;
-				$config['height'] = 300;
-				$config['master_dim']='width';
-				$this->image_lib->clear();
-				$this->image_lib->initialize($config);
-				$this->image_lib->resize();
-				
-				/*$config['x_axis']=0;
-				$config['y_axis']=0;
-				$config['maintain_ratio']=FALSE;*/
-                return $name;                                
-			}
+		function changeUserPicture($userId, $pictureName){
+			$data['picture']=$pictureName;
+			$this->db->where(array('user_id'=>$userId))->update('users',$data);
 		}
-				
-		function changeUserPicture($file){			
-			$id=$_SESSION['user']['id'];					
-			$dir="./images/users/";            
-			$type = explode('/',$file['type']);
-			$type = $type[1];
-			if($type == 'jpeg')
-				$type = 'jpg';
-			$name = $id.'.'.$type;
-			$config['upload_path']=$dir;
-			$config['allowed_types']='jpg|png';
-			$config['file_name']=$name;
-			
-			$this->load->library('upload',$config);
-            $this->upload->initialize($config);
-            $this->upload->overwrite = true;
-			if(!$this->upload->do_upload('picture')){
-				echo $this->upload->display_errors();
-				return false;
-			}
-			else{
-				print_r($name);
-				list($width, $height) = getimagesize($dir.''.$name);
-				$config['source_image']=$dir.''.$name;
-				$config['maintain_ratio']=FALSE;
-				if($width>$height){
-    				$config['width'] = $height;
-    				$config['height'] = $height;
-    				$config['x_axis'] = (($width / 2) - ($config['width'] / 2));
-				}
-				else{
-					$config['height'] = $width;
-    				$config['width'] = $width;
-   					$config['y_axis'] = (($height / 2) - ($config['height'] / 2));
-				}
-
-				$this->load->library('image_lib',$config);
-				$this->image_lib->initialize($config);
-				$this->image_lib->crop();
-
-				$config['source_image']=$dir.''.$name;
-				$config['maintain_ratio']=TRUE;
-				$config['width'] = 300;
-				$config['height'] = 300;
-				$config['master_dim']='width';
-				$this->image_lib->clear();
-				$this->image_lib->initialize($config);
-				$this->image_lib->resize();
-				//return $name;
-				$data['picture'] = $name; 
-				$this->db->where(array('user_id'=>$_SESSION['user']['id']))->update('users',$data);                               
-			}
-			 
-		}
-
+		
+		
 		//USER
 
 		function getUser($userId) {
@@ -261,7 +173,7 @@
 				return false;
 			}
 		}
-
+		
 		function getGoals($userId){
 			$goals = $this->db->where(array('user_id'=>$userId, 'status_id !='=>0))->get('goals')->result();
 			for($i=0; sizeof($goals)>0 && $i<sizeof($goals) ;$i++){
@@ -286,9 +198,7 @@
             	return false;
             }
 		}
-
 		//GOAL
-
 		function getGoal($goalId){
 			$goal = $this->db->where(array('goal_id'=>$goalId))->get('goals')->row();
 			if($goal!=false){
@@ -297,6 +207,8 @@
 				$data['description']=$goal->description;
 				$data['userId']=$goal->user_id;
 				$data['goalTypeId']=$goal->goal_type_id;
+				$data['goalTypePicture']=$this->getCategory($goal->goal_type_id)['picture'];
+				$data['statusName']=$this->getStatusName($goal->status_id);
 				$data['statusId']=$goal->status_id;
 				$data['creationDate']=$goal->creation_date;
 				$data['startDate']=$goal->start_date;
@@ -310,7 +222,6 @@
 				return false;
 			}
 		}
-
 		function getMilestone($milestoneId){
 			$milestone = $this->db->where(array('milestone_id'=>$milestoneId))->get('milestones')->row();
 			if(isset($milestone->milestone_id)){
@@ -325,7 +236,6 @@
 				return false;
 			}
 		}
-
 		function getPicture($pictureId){
 			$picture = $this->db->where(array('picture_id'=>$pictureId))->get('goals_pictures')->row();
 			if(isset($picture->picture_id)){
@@ -339,7 +249,6 @@
 				return false;
 			}
 		}
-
 		function getMilestones($goalId){
 			$milestones = $this->db->where(array('goal_id'=>$goalId, 'status_id !='=>0))->get('milestones')->result();
 			for($i=0; sizeof($milestones)>0 && $i<sizeof($milestones) ;$i++){
@@ -356,7 +265,6 @@
             	return false;
             }
 		}
-
 		function getGoalPictures($goalId){
 			$pictures = $this->db->where(array('goal_id'=>$goalId))->get('goals_pictures')->result();
 			for($i=0; sizeof($pictures)>0 && $i<sizeof($pictures) ;$i++){
@@ -372,11 +280,9 @@
             	return false;
             }
 		}
-
 		function getCategoryName($category){
 			return $this->db->where(array('type_id'=>$category))->get('goal_type')->row()->name;
 		}
-
 		function getCategory($categoryId){
 			$type = $this->db->where(array('type_id'=>$categoryId))->get('goal_type')->row();
 			if($type!=false){
@@ -387,18 +293,15 @@
 			}
 			return false;
 		}
-
 		function getStatusName($status){
 			return $this->db->where(array('status_id'=>$status))->get('status')->row()->name;
 		}
-
 		//ADD, UPDATE, DELETE GOAL
-
-		function addGoal($data){
+		function addGoal($userId,$data){
 			if($this->db->insert('goals',$data)) {
 				$newGoalId = $this->db->insert_id();
 				$newsFeed['news_type_id'] = 0;
-				$newsFeed['user_id'] = $_SESSION['user']['id'];
+				$newsFeed['user_id'] = $userId;
 				$newsFeed['object_id'] = $newGoalId;
 				$this->load->helper('date');
 				$newsFeed['created_date'] = mdate("%Y-%m-%d",time());
@@ -409,13 +312,12 @@
 				return false;
 			//Add to news feed
 		}
-
-		function updateGoal($data, $goalId){
+		function updateGoal($userId,$data, $goalId){
 			$oldGoal = $this->getGoal($goalId);
 			if($this->db->where(array('goal_id'=>$goalId))->update('goals',$data)){
 				if($data['status_id'] != $oldGoal['statusId']){
 					$newsFeed['news_type_id'] = 2;
-					$newsFeed['user_id'] = $_SESSION['user']['id'];
+					$newsFeed['user_id'] = $userId;
 					$newsFeed['object_id'] = $goalId;
 					$this->load->helper('date');
 					$newsFeed['created_date'] = mdate("%Y-%m-%d",time());
@@ -425,19 +327,17 @@
 			}
 			//Add to news feed if status was updated
 		}
-
 		function deleteGoal($goalId){
 			$data['status_id'] = 0;
 			$this->db->where(array('goal_id'=>$goalId))->update('goals',$data);
 			return true;
 			//eliminar news feed
 		}
-
-		function addMilestone($data){
+		function addMilestone($userId,$data){
 			if($this->db->insert('milestones',$data)) {
 				$newMilestoneId = $this->db->insert_id();
 				$newsFeed['news_type_id'] = 1;
-				$newsFeed['user_id'] = $_SESSION['user']['id'];
+				$newsFeed['user_id'] = $userId;
 				$newsFeed['object_id'] = $newMilestoneId;
 				$this->load->helper('date');
 				$newsFeed['created_date'] = mdate("%Y-%m-%d",time());
@@ -447,13 +347,12 @@
 			else
 				return false;
 		}
-
-		function updateMilestone($data, $milestoneId){			
+		function updateMilestone($userId,$data, $milestoneId){			
 			$oldMilestone = $this->getMilestone($milestoneId);
 			if($this->db->where(array('milestone_id'=>$milestoneId))->update('milestones',$data)) {
 				if($data['status_id'] != $oldMilestone['statusId']){
 					$newsFeed['news_type_id'] = 3;
-					$newsFeed['user_id'] = $_SESSION['user']['id'];
+					$newsFeed['user_id'] = $userId;
 					$newsFeed['object_id'] = $milestoneId;
 					$this->load->helper('date');
 					$newsFeed['created_date'] = mdate("%Y-%m-%d",time());
@@ -461,24 +360,19 @@
 				}
 				return true;
 			}
-
-
 			//Add to news feed if status was updated
 		}
-
 		function deleteMilestone($milestoneId){
 			$data['status_id'] = 0;
 			$this->db->where(array('milestone_id'=>$milestoneId))->update('milestones',$data);
 			return true;
 			//eliminar news feed
 		}
-
-		function addGoalPicture($data){
-			$data['name'] = $this->uploadGoalPicture($data['name'],$data['goal_id']);
+		function addGoalPicture($userId, $data){
 			if($this->db->insert('goals_pictures',$data)) {
 				$newPictureId = $this->db->insert_id();
 				$newsFeed['news_type_id'] = 4;
-				$newsFeed['user_id'] = $_SESSION['user']['id'];
+				$newsFeed['user_id'] = $userId;
 				$newsFeed['object_id'] = $newPictureId;
 				$this->load->helper('date');
 				$newsFeed['created_date'] = mdate("%Y-%m-%d",time());
@@ -488,13 +382,11 @@
 			else
 				return false;
 		}
-
-		function updateGoalPicture($data, $pictureId){
+		function updateGoalPicture($pictureId,$data){
 			$this->db->where(array('picture_id'=>$pictureId))->update('goals_pictures',$data);
 			return true;
 			//Add to news feed if status was updated
 		}
-
 		function deleteGoalPicture($pictureId){
 			$picture = $this->getPicture($pictureId);
 			unlink(base_url().'images/goals/'.$picture['name']);
@@ -503,8 +395,7 @@
 			//$this->db->where(array('picture_id'=>$pictureId))->update('goals_pictures',$data);
 			return true;
 		}
-
-		function uploadGoalPicture($picture, $goalId){
+		/*function uploadGoalPicture($picture, $goalId){
 			$id = $this->db->select_max('picture_id')->get('goals_pictures')->row()->picture_id;
 			$id++;
 			$dir="./images/goals/";            
@@ -536,11 +427,15 @@
                 return $name;                                
 			}
 		}
-
+		*/
+		function nextPictureId(){
+			$id = $this->db->select_max('picture_id')->get('goals_pictures')->row()->picture_id;
+			$id++;
+			return $id;			
+		}
 		//NEWS FEED
-
-		function getNewsFeedFollowing(){
-			$following = $this->getFollowing();
+		function getNewsFeedFollowing($userId){
+			$following = $this->getFollowing($userId);
 			$c = 0;
 			for($i=0; sizeof($following)>0 && $i<sizeof($following); $i++){
 				$followingNews = $this->getNewsFeedFromUser($following[$i]['id']);
@@ -556,7 +451,6 @@
 				return false;
 			}
 		}
-
 		function getNewsFeedFromUser($userId){
 			$newsFeed = $this->db->where(array('user_id'=>$userId))->get('news_feed')->result();
 			$c = 0;
@@ -565,7 +459,7 @@
 				switch($item->news_type_id){
 					case 0: //created goal
 						$goal = $this->getGoal($item->object_id);
-						if($goal['statusId']!=0){
+						if($goal['statusId']!=0&&$goal['isPublic']!=0){
 							$user = $this->getUser($item->user_id);
 							$data[$c]['id'] = $item->news_feed_id;
 							$data[$c]['type'] = 0;
@@ -586,13 +480,12 @@
 							$c++;
 						}
 					break;
-
 					case 1: //created milestone
 						$milestone = $this->getMilestone($item->object_id);
 						if($milestone['statusId']!=0){
 							$goal = $this->getGoal($milestone['goalId']);
 							$user = $this->getUser($item->user_id);
-							if($goal['statusId']!=0){
+							if($goal['statusId']!=0&&$goal['isPublic']!=0){
 								$data[$c]['id'] = $item->news_feed_id;
 								$data[$c]['type'] = 1;
 								$date = timespan(strtotime($item->created_date), now()) . ' ago';
@@ -614,10 +507,9 @@
 							}
 						}
 					break;
-
 					case 2: //updated goal status
 						$goal = $this->getGoal($item->object_id);
-						if($goal['statusId']!=0){
+						if($goal['statusId']!=0&&$goal['isPublic']!=0){
 							$user = $this->getUser($item->user_id);
 							$data[$c]['id'] = $item->news_feed_id;
 							$data[$c]['type'] = 2;
@@ -637,13 +529,12 @@
 							$c++;
 						}
 					break;
-
 					case 3: //updated milestone status
 						$milestone = $this->getMilestone($item->object_id);
 						if($milestone['statusId']!=0){
 							$goal = $this->getGoal($milestone['goalId']);
 							$user = $this->getUser($item->user_id);
-							if($goal['statusId']!=0){
+							if($goal['statusId']!=0&&$goal['isPublic']!=0){
 								$data[$c]['id'] = $item->news_feed_id;
 								$data[$c]['type'] = 3;
 								$date = timespan(strtotime($item->created_date), now()) . ' ago';
@@ -665,14 +556,13 @@
 							}
 						}
 					break;
-
 					case 4: //added picture
 						$picture = $this->getPicture($item->object_id);
 						if($picture != false){
 							$goal = $this->getGoal($picture['goalId']);
 							$user = $this->getUser($item->user_id);
 							//echo $item->news_feed_id;
-							if($goal['statusId']!=0){
+							if($goal['statusId']!=0&&$goal['isPublic']!=0){
 								$data[$c]['id'] = $item->news_feed_id;
 								$data[$c]['type'] = 4;
 								$date = timespan(strtotime($item->created_date), now()) . ' ago';
@@ -695,7 +585,6 @@
 							}
 						}
 					break;
-
 					case 5: //user started following
 						$following = $this->getUser($item->object_id);
 						$user = $this->getUser($item->user_id);
@@ -714,15 +603,12 @@
 					break;
 				}
 			}
-
 			if(sizeof($newsFeed)>0)
 				return $data;
 			else
 				return false;
 		}
-
-		function getNewsFeedByCategory($categoryId){
-
+		function getNewsFeedByCategory($userId,$categoryId){
 			//Created goal
 			$this->db->select('nf.news_feed_id as news_feed_id, 
 							   nf.news_type_id as news_type_id, 
@@ -732,7 +618,7 @@
 	        $this->db->from('news_feed AS nf');
 	        $this->db->join('users','nf.user_id=users.user_id');
 	        $this->db->join('goals','nf.object_id=goals.goal_id');
-	        $newsFeed = $this->db->where(array('nf.news_type_id'=>0, 'goals.goal_type_id'=>$categoryId, 'goals.status_id !='=>0, 'users.user_id !='=>$_SESSION['user']['id']))->get()->result();
+	        $newsFeed = $this->db->where(array('nf.news_type_id'=>0, 'goals.goal_type_id'=>$categoryId,'goals.is_public'=>1, 'goals.status_id !='=>0, 'users.user_id !='=>$userId))->get()->result();
 	        for($i=0; sizeof($newsFeed)>0 && $i<sizeof($newsFeed) ;$i++){
 	        	$item = $newsFeed[$i];
 	        	$goal = $this->getGoal($item->object_id);
@@ -754,7 +640,6 @@
 				$data[$i]['categoryName'] = $category['name'];
 				$data[$i]['categoryPicture'] = $category['picture'];
 	        }
-
 	        //Created milestone
 			$this->db->select('nf.news_feed_id as news_feed_id, 
 							   nf.news_type_id as news_type_id, 
@@ -765,7 +650,7 @@
 	        $this->db->join('users','nf.user_id=users.user_id');
 	        $this->db->join('milestones','nf.object_id=milestones.milestone_id');
 	        $this->db->join('goals','nf.object_id=milestones.goal_id');
-	        $newsFeed = $this->db->where(array('nf.news_type_id'=>1, 'goals.goal_type_id'=>$categoryId, 'goals.status_id !='=>0, 'milestones.status_id !='=>0, 'users.user_id !='=>$_SESSION['user']['id']))->get()->result();
+	        $newsFeed = $this->db->where(array('nf.news_type_id'=>1, 'goals.goal_type_id'=>$categoryId, 'goals.is_public'=>1,'goals.status_id !='=>0, 'milestones.status_id !='=>0, 'users.user_id !='=>$userId))->get()->result();
 	        for($i=0; sizeof($newsFeed)>0 && $i<sizeof($newsFeed) ;$i++){
 	        	$item = $newsFeed[$i];
 				$milestone = $this->getMilestone($item->object_id);
@@ -788,7 +673,6 @@
 				$data[$i]['categoryName'] = $category['name'];
 				$data[$i]['categoryPicture'] = $category['picture'];
 	        }
-
 	        //Updated goal status
 	        $this->db->select('nf.news_feed_id as news_feed_id, 
 							   nf.news_type_id as news_type_id, 
@@ -798,7 +682,7 @@
 	        $this->db->from('news_feed AS nf');
 	        $this->db->join('users','nf.user_id=users.user_id');
 	        $this->db->join('goals','nf.object_id=goals.goal_id');
-	        $newsFeed = $this->db->where(array('nf.news_type_id'=>2, 'goals.goal_type_id'=>$categoryId,'goals.status_id !='=>0, 'users.user_id !='=>$_SESSION['user']['id']))->get()->result();
+	        $newsFeed = $this->db->where(array('nf.news_type_id'=>2, 'goals.goal_type_id'=>$categoryId,'goals.status_id !='=>0,  'goals.is_public'=>1,'users.user_id !='=>$userId))->get()->result();
 	        for($i=0; sizeof($newsFeed)>0 && $i<sizeof($newsFeed) ;$i++){
 	        	$item = $newsFeed[$i];
 	        	$goal = $this->getGoal($item->object_id);
@@ -820,7 +704,6 @@
 				$data[$i]['categoryName'] = $category['name'];
 				$data[$i]['categoryPicture'] = $category['picture'];
 	        }
-
 	        //Updated milestone status
 	        $this->db->select('nf.news_feed_id as news_feed_id, 
 							   nf.news_type_id as news_type_id, 
@@ -831,10 +714,11 @@
 	        $this->db->join('users','nf.user_id=users.user_id');
 	        $this->db->join('milestones','nf.object_id=milestones.milestone_id');
 	        $this->db->join('goals','nf.object_id=milestones.goal_id');
-	        $newsFeed = $this->db->where(array('nf.news_type_id'=>3, 'goals.goal_type_id'=>$categoryId, 'goals.status_id !='=>0, 'milestones.status_id !='=>0, 'users.user_id !='=>$_SESSION['user']['id']))->get()->result();
+	        $newsFeed = $this->db->where(array('nf.news_type_id'=>3, 'goals.goal_type_id'=>$categoryId,  'goals.is_public'=>1,'goals.status_id !='=>0, 'milestones.status_id !='=>0, 'users.user_id !='=>$userId))->get()->result();
 	        for($i=0; sizeof($newsFeed)>0 && $i<sizeof($newsFeed) ;$i++){
-	        	$milestone = $this->getMilestone($item->object_id);
-				$goal = $this->getGoal($milestone['goal_id']);
+				$item = $newsFeed[$i];
+				$milestone = $this->getMilestone($item->object_id);
+				$goal = $this->getGoal($milestone['goalId']);
 				$user = $this->getUser($item->user_id);
 				$data[$i]['id'] = $item->news_feed_id;
 				$data[$i]['type'] = $item->news_type_id;
@@ -848,13 +732,12 @@
 				$data[$i]['goalTitle'] = $goal['title'];
 				$data[$i]['goalStatus'] = $this->getStatusName($goal['statusId']);
 				$data[$i]['milestoneTitle'] = $milestone['title'];
-				$data[$i]['milestoneStatus'] = $this->getStatusName($milestone['status']);
+				$data[$i]['milestoneStatus'] = $this->getStatusName($milestone['statusId']);
 				$data[$i]['goalDeadline'] = $goal['finishingDate'];
 				$category = $this->getCategory($goal['goalTypeId']);
 				$data[$i]['categoryName'] = $category['name'];
 				$data[$i]['categoryPicture'] = $category['picture'];
 	        }
-
 	        //Added picture
 	        $this->db->select('nf.news_feed_id as news_feed_id, 
 							   nf.news_type_id as news_type_id, 
@@ -865,7 +748,7 @@
 	        $this->db->join('users','nf.user_id=users.user_id');
 	        $this->db->join('goals_pictures','nf.object_id=goals_pictures.picture_id');
 	        $this->db->join('goals','goals_pictures.goal_id=goals.goal_id','left');
-	        $newsFeed = $this->db->where(array('nf.news_type_id'=>4, 'goals.goal_type_id'=>$categoryId,'goals.status_id !='=>0, 'users.user_id !='=>$_SESSION['user']['id']))->get()->result();
+	        $newsFeed = $this->db->where(array('nf.news_type_id'=>4, 'goals.goal_type_id'=>$categoryId, 'goals.is_public'=>1,'goals.status_id !='=>0, 'users.user_id !='=>$userId))->get()->result();
 	        for($i=0; sizeof($newsFeed)>0 && $i<sizeof($newsFeed) ;$i++){
 	        	$item = $newsFeed[$i];
 	        	$picture = $this->getPicture($item->object_id);
@@ -896,12 +779,10 @@
 			else
 				return false;
 		}
-
 		function addNewsFeed($data){
-
 			$this->db->insert('news_feed',$data);
 			return true;
-		}
+		}	
 		
 		function search($keyword){
 			$searchResults = $this->db->query("SELECT * FROM users WHERE concat(first_name,middle_name,last_name) LIKE '%".$keyword."%';")->result_array();;
@@ -915,6 +796,7 @@
             	return $users;
 			else
 				return false;
-		}
+		}		
+		
 	}
 ?>

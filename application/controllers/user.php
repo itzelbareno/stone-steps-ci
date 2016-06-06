@@ -25,6 +25,7 @@
 				$data['listGoals'][$i]['id'] = $listGoals[$i]['id'];
 				$data['listGoals'][$i]['statusId'] = $listGoals[$i]['statusId'];
 				$data['listGoals'][$i]['statusName'] = $listGoals[$i]['statusName'];
+				$data['listGoals'][$i]['isPublic'] = $listGoals[$i]['isPublic'];
 			}
 
 			$data['nf_user'] = $this->model->getNewsFeedFromUser($_SESSION['user']['id']);
@@ -41,6 +42,7 @@
 			$data['lastName'] = $user['lastName'];
 			$data['email'] = $user['email'];
 			$data['picture'] = $user['picture'];
+			$data['listGoals'][$i]['isPublic'] = $listGoals[$i]['isPublic'];
 			
 			$completedGoals = $this->model->getCompletedGoals($userId);
 			$data['completed'] = $completedGoals;

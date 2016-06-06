@@ -136,9 +136,9 @@
                 <span class="box-title">
                   <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $id; ?>/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?> </a> was created as a goal.<br>
                 </span>
-                <span class="box-time">
-                  <?php echo $nf_user[$i]['date']; ?>
-                </span>
+                <!--<span class="box-time">
+                  <?//php echo $nf_user[$i]['date']; ?>
+                </span>-->
               </div>
             </div>
 
@@ -168,9 +168,9 @@
                     <span class="box-title">
                       <?php echo $nf_user[$i]['milestoneTitle']; ?> was added to <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $id; ?>/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?> </a><br>
                     </span>
-                    <span class="box-time">
-                      <?php echo $nf_user[$i]['date']; ?>
-                    </span>
+                    <!--<span class="box-time">
+                      <?//php echo $nf_user[$i]['date']; ?>
+                    </span>-->
                   </div>
                 </div>
 
@@ -199,9 +199,9 @@
                     <span class="box-title">
                       <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $id; ?>/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?> </a> status was updated.<br>
                     </span>
-                    <span class="box-time">
-                      <?php echo $nf_user[$i]['date']; ?>
-                    </span>
+                    <!--<span class="box-time">
+                      <?php// echo $nf_user[$i]['date']; ?>
+                    </span>-->
                   </div>
                 </div>
 
@@ -229,9 +229,9 @@
                   <span class="box-title">
                     <?php echo $nf_user[$i]['milestoneTitle']; ?> status was updated in goal <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $id; ?>/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?> </a><br>
                   </span>
-                  <span class="box-time">
-                    <?php echo $nf_user[$i]['date']; ?>
-                  </span>
+                  <!--<span class="box-time">
+                    <?php// echo $nf_user[$i]['date']; ?>
+                  </span>-->
                 </div>
               </div>
                 <div class="row valign-wrapper">
@@ -258,9 +258,9 @@
                   <span class="box-title">
                     A picture was added to <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $id; ?>/<?php echo $nf_user[$i]['goalId']; ?>"><?php echo $nf_user[$i]['goalTitle']; ?> </a><br>
                   </span>
-                  <span class="box-time">
-                    <?php echo $nf_user[$i]['date']; ?>
-                  </span>
+                  <!--<span class="box-time">
+                    <?php //echo $nf_user[$i]['date']; ?>
+                  </span>-->
                 </div>
               </div>
               <div class="row valign-wrapper">
@@ -292,9 +292,9 @@
                     <span class="box-title">
                       <a href="<?php echo base_url(); ?>user/user_profile/<?php echo $nf_user[$i]['userId']; ?>"><?php echo $nf_user[$i]['userName']; ?></a> started following someone.<br>
                     </span>
-                    <span class="box-time">
-                      <?php echo $nf_user[$i]['date']; ?>
-                    </span>
+                    <!--<span class="box-time">
+                      <?php// echo $nf_user[$i]['date']; ?>
+                    </span>-->
                   </div>
               </div>
 
