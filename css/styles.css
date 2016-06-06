@@ -334,3 +334,9 @@ div.show-image a{
     position: absolute;
     color:#fff;
 }
+
+.goal-image
+{
+  width: auto;
+  height: 120;
+}

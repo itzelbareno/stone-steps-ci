@@ -158,8 +158,8 @@
 					
 				</div> <!--Row Mediano -->
 				<?php
-        }
-        ?>
+        	}
+        	?>
 				
 			</div> <!-- <div class="container-90"> -->
 		</div>
@@ -168,19 +168,21 @@
 		<div class="col s12 m8">
 			<div class="container">	
 				<div class="row">
-					<?php for($i=0;isset($goalPictures[$i]['name'])&&$i<sizeof($goalPictures,0);$i++) {?>
-						<div class="col s12 m6 l3 center ">
-							<div class="row">
-								<img class=" materialboxed goal-image" width="480" src="/stone-steps-ci/images/goals/<?php echo $goalPictures[$i]['name']; ?>">
-							</div>
-							<div class="row">
-								<label class ="dark-primary-text">"<?php echo $goalPictures[$i]['caption'];?>"</label>
-							</div>
-							<div class="row">
-							<a href="#modal<?php echo $i;?>" id="create-button" class="btn-main dark-primary waves-effect waves-light modal-trigger data-target=modal<?php echo $i;?> offset-s3 offset-m3 offset-l3 col s6 m6 l6 ">Edit Photo</a>
+					<?php for($i=0;isset($goalPictures[$i]['name']) && $i<sizeof($goalPictures,0);$i++) {?>
+						<div class="col s12 center m5 l5">
+							<div class="container">
+								<div class="row center-align">
+									<img class="materialboxed goal-image" width="480" src="<?php echo base_url(); ?>images/goals/<?php echo $goalPictures[$i]['name']; ?>">
+								</div>
+								<div class="row center-align">
+									<label class ="dark-primary-text">"<?php echo $goalPictures[$i]['caption'];?>"</label>
+								</div>
+								<div class="row center-align">
+								<a href="#modal<?php echo $i;?>" id="create-button" class="btn-main dark-primary waves-effect waves-light modal-trigger data-target=modal<?php echo $i;?> offset-s3 offset-m3 offset-l3 col s6 m6 l6 ">Edit Photo</a>
+								</div>
 							</div>
 						</div>
-						<div class="col s0 m0 l0 center "><br></div>
+						<div class="col s0 m1 l0 center "><br></div>
 					<?php } ?>
 				</div>
 			</div>	
