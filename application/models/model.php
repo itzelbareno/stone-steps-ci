@@ -191,6 +191,68 @@
                 return $name;                                
 			}
 		}
+		
+		function deleteUserPicture(){
+			$data['picture'] = 0;			
+			$this->db->where(array('user_id'=>$_SESSION['user']['id']))->update('users',$data);
+			return true;
+			
+		}
+		
+		function changeUserPicture($file){			
+			$id=$_SESSION['user']['id'];			
+			$this->deleteUserPicture();			
+			$dir="./images/users/";            
+			$type = explode('/',$file['type']);
+			$type = $type[1];
+			if($type == 'jpeg')
+				$type = 'jpg';
+			$name = $id.'.'.$type;
+			$config['upload_path']=$dir;
+			$config['allowed_types']='jpg|png';
+			$config['file_name']=$name;
+			
+			$this->load->library('upload',$config);
+            $this->upload->initialize($config);
+            $this->upload->overwrite = true;
+			if(!$this->upload->do_upload('picture')){
+				echo $this->upload->display_errors();
+				return false;
+			}
+			else{
+				print_r($name);
+				list($width, $height) = getimagesize($dir.''.$name);
+				$config['source_image']=$dir.''.$name;
+				$config['maintain_ratio']=FALSE;
+				if($width>$height){
+    				$config['width'] = $height;
+    				$config['height'] = $height;
+    				$config['x_axis'] = (($width / 2) - ($config['width'] / 2));
+				}
+				else{
+					$config['height'] = $width;
+    				$config['width'] = $width;
+   					$config['y_axis'] = (($height / 2) - ($config['height'] / 2));
+				}
+
+				$this->load->library('image_lib',$config);
+				$this->image_lib->initialize($config);
+				$this->image_lib->crop();
+
+				$config['source_image']=$dir.''.$name;
+				$config['maintain_ratio']=TRUE;
+				$config['width'] = 300;
+				$config['height'] = 300;
+				$config['master_dim']='width';
+				$this->image_lib->clear();
+				$this->image_lib->initialize($config);
+				$this->image_lib->resize();
+				//return $name;
+				$data['picture'] = $name; 
+				$this->db->where(array('user_id'=>$_SESSION['user']['id']))->update('users',$data);                               
+			}
+			 
+		}
 
 		//USER
 

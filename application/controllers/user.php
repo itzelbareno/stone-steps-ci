@@ -33,8 +33,7 @@
 			$this->load->view('structure/template', $data);
 		}
 		
-		public function user_profile($userId)
-		{
+		public function user_profile($userId){
 			$user = $this->model->getUser($userId);
 			$data['id'] = $userId;
 			$data['firstName'] = $user['firstName'];
@@ -54,6 +53,7 @@
 				$data['listGoals'][$i]['title'] = $listGoals[$i]['title'];
 				$data['listGoals'][$i]['id'] = $listGoals[$i]['id'];
 				$data['listGoals'][$i]['statusId'] = $listGoals[$i]['statusId'];
+				$data['listGoals'][$i]['statusName'] = $listGoals[$i]['statusName'];
 			}
 			
 			$isFollowing = $this->model->isFollowing($userId);
@@ -74,6 +74,11 @@
 		public function stopFollowing($userId){
 			$this->model->stopFollowing($userId);
 			redirect(base_url()."user/user_profile/".$userId);
+		}
+		
+		public function change_picture(){
+			$print=$this->model->changeUserPicture($_FILES['picture']);
+			redirect(base_url()."user");
 		}
 			
 	}

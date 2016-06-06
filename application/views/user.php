@@ -1,11 +1,44 @@
 <div class="container">
   <br><br>
 
-  <div id="modalpicture" class="modal">
-    <div class="modal-content">
-      
-    </div>
-  </div>
+  <!----- Modal Picture -->
+<div id="modalPicture" class="modal col s6 offset-s2">
+	<form  id="changePictureForm" method="post" action="<?php echo base_url(); ?>user/change_picture" enctype="multipart/form-data">
+		<div class="modal-content">
+      <div class = "col s12 center">
+        <!-- Preview Imagen -->
+        <div class="row">
+          <img  class="user" id="imagenPerfil" name="imagenPerfil" src="<?php echo base_url();?>images/users/<?php echo $picture;?>">
+        </div>
+        
+        <!-- Cargar Imagen -->
+        <div class="row">
+          <div class = "col s6 offset-s3">
+            <div class="file-field input-field">
+              <div class="btn waves-effect dark-primary waves-light">
+                <span><i class="material-icons ">perm_media add</i></span>
+                <input type="file" form="changePictureForm" name="picture" onchange="document.getElementById('imagenPerfil').src = window.URL.createObjectURL(this.files[0])">
+              </div>
+              <div class="file-path-wrapper">
+                <input class="file-path validate" type="text" placeholder="Upload Goal Photo">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botones Submit  | Cancel -->
+        <div class="row ">
+          <div class="col center s12 ">
+            <a href="#!" class="modal-action modal-close waves-effect waves-light btn grey" method="post">Cancel</a>
+            <input type="submit" form="changePictureForm" class="modal-action modal-close waves-effect waves-green btn primary-dark" value="Save">		
+          </div>
+        </div>
+        
+			</div>
+		</div>
+	</form>
+</div>
+<!----- Termina Modal -->
 
   <div class="row"> <!-- Row General -->
     <div class = "col s12 m4 center"><!--Columna Izquierda-->
@@ -13,7 +46,11 @@
         <div class="row">
           <div class="show-image">
             <img class="materialboxed user z-depth-1" src="<?php echo base_url();?>images/users/<?php echo $picture;?>">
+            <?php if($id == $_SESSION['user']['id']){?>
             <a href="#modalPicture" class="modal-trigger data-target=modal1"><i class = "accent-text material-icons">edit</i></a>
+            <?php
+            }
+            ?>
           </div>
         </div>
         
