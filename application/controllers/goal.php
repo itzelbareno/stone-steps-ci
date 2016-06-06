@@ -23,13 +23,14 @@
 			}
 			
 			$listMilestones = $this->model->getMilestones($goalInfo['id']);	
-			//$data['milestones'] = $this->model->getMilestones($goalInfo['id']);	
+				
 			for($i=0; $listMilestones!=false && $i<sizeof($listMilestones);$i++){
 				$data['listMilestones'][$i]['title'] = $listMilestones[$i]['title'];
 				$data['listMilestones'][$i]['id'] = $listMilestones[$i]['id'];
 				$data['listMilestones'][$i]['statusId'] = $listMilestones[$i]['statusId'];
 			}
 			
+			$data['goalPictures'] = $this->model->getGoalPictures($goalInfo['id']);
 			$data['content']='goal';
 			$this->load->view('structure/template',$data);
 		}
@@ -246,20 +247,26 @@
 			redirect(base_url().'goal/update_pictures/'.$pic['goalId']);
 		}
 		function receiveDataNewPicture($goalId){
-			$picture['goal_id'] =$goalId ;
-			$picture['caption'] = $_POST['caption'];
-			$picture['name'] = $_FILES['name'];
-			
-			$result = $this->model->addGoalPicture($picture);
-			if($result === false){
-				$data['error']="Error: Could not update picture at the moment, please try again later.";
-				$this->session->set_flashdata('error-goal', $data);
-				redirect(base_url().'goal/update_pictures/'.$goalId);
+			if($_POST['caption']!="" && $_FILES['name']!=""){
+				print_r($_POST['caption']);
+				print_r($_FILES['name']);
+				$picture['goal_id'] =$goalId ;
+				$picture['caption'] = $_POST['caption'];
+				$picture['name'] = $_FILES['name'];
+				
+				$result = $this->model->addGoalPicture($picture);
+				if($result === false){
+					$data['error']="Error: Could not update picture at the moment, please try again later.";
+					$this->session->set_flashdata('error-goal', $data);
+					redirect(base_url().'goal/update_pictures/'.$goalId);
+				}
+				else{
+					$data['error']="";
+					redirect(base_url().'goal/update_pictures/'.$goalId);
+				}
 			}
 			else{
-				$data['error']="";
-				redirect(base_url().'goal/update_pictures/'.$goalId);
-				
+				redirect(base_url().'goal/update_pictures/'.$goalId);	
 			}
 		}
 
