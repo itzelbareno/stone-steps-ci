@@ -186,22 +186,12 @@
 				/*$config['x_axis']=0;
 				$config['y_axis']=0;
 				$config['maintain_ratio']=FALSE;*/
-				                
-                
                 return $name;                                
 			}
 		}
-		
-		function deleteUserPicture(){
-			$data['picture'] = 0;			
-			$this->db->where(array('user_id'=>$_SESSION['user']['id']))->update('users',$data);
-			return true;
-			
-		}
-		
+				
 		function changeUserPicture($file){			
-			$id=$_SESSION['user']['id'];			
-			$this->deleteUserPicture();			
+			$id=$_SESSION['user']['id'];					
 			$dir="./images/users/";            
 			$type = explode('/',$file['type']);
 			$type = $type[1];
@@ -567,7 +557,6 @@
 			}
 		}
 
-
 		function getNewsFeedFromUser($userId){
 			$newsFeed = $this->db->where(array('user_id'=>$userId))->get('news_feed')->result();
 			$c = 0;
@@ -912,6 +901,20 @@
 
 			$this->db->insert('news_feed',$data);
 			return true;
+		}
+		
+		function search($keyword){
+			$searchResults = $this->db->query("SELECT * FROM users WHERE concat(first_name,middle_name,last_name) LIKE '%".$keyword."%';")->result_array();;
+            for($i=0; isset($searchResults) && $i<sizeof($searchResults) ;$i++){
+                $users[$i]['id']= $searchResults[$i]['user_id'];
+                $users[$i]['name']= $searchResults[$i]['first_name'].' '.$searchResults[$i]['middle_name'].' '.$searchResults[$i]['last_name'];
+                $users[$i]['completedGoals']= $this->getCompletedGoals($searchResults[$i]['user_id']);
+                $users[$i]['picture']= $searchResults[$i]['picture'];
+            }
+            if(sizeof($searchResults)>0)
+            	return $users;
+			else
+				return false;
 		}
 	}
 ?>
