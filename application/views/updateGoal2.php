@@ -50,7 +50,7 @@
 						<div class="row ">
 							<div class="col center s12 ">
 								<a href="#!" class=" modal-action modal-close waves-effect waves-light btn grey" method="post">Cancel</a>
-								<input type="submit" id="formadd" class=" modal-action modal-close waves-effect waves-green btn primary-dark" value="Save">				
+								<button type="submit" id="formadd" class="modal-action modal-close waves-effect waves-green btn primary-dark">Save</button>			
 							</div>
 						</div>
 					</div>					
@@ -87,7 +87,7 @@
 						<div class="row ">
 							<div class="col center s12 ">
 								<a href="<?php  echo base_url();?>goal/delete_milestone/<?php echo $milestones[$i]['id']; ?>" class=" modal-action modal-close waves-effect waves-light btn grey" method="post">Delete</a>
-								<input type="submit" form="form<?php echo $i; ?>" class="modal-action modal-close waves-effect waves-green btn primary-dark" value="Save">		
+								<button type="submit" form="form<?php echo $i; ?>" class="modal-action modal-close waves-effect waves-green btn primary-dark">Save</button>
 							</div>
 						</div>
 					</div>

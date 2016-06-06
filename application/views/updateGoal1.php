@@ -1,22 +1,22 @@
 <div class="section no-pad-bot" id="index-banner">
 	<div class="container">
 		
-			<div class="row">
-				<h1 class="header center secondary-text col s12">Ready to Commit?</h1>
-				<h5 class="header center col s12 secondary-text"> Fill your goal info and start achieving! </h5>
-			</div>
+		<div class="row">
+			<h1 class="header center secondary-text col s12">Ready to Commit?</h1>
+			<h5 class="header center col s12 secondary-text"> Fill your goal info and start achieving! </h5>
+		</div>
 			
-			<div class="row">	
-				<div class="col s12 center">
-					<nav>
-						<div class="nav-wrapper accent ">
-							<a href="<?php  echo base_url();?>goal<?php if(isset($goalId))  echo "/update_goal/".$goalId; ?>" class="breadcrumb  white-text "><b>Details</b></a>
-							<a href="<?php  echo base_url();?>goal<?php if(isset($goalId))  echo "/update_milestones/".$goalId; ?>" class="breadcrumb  grey-text text-lighten-3">Milestones</a>
-							<a href="<?php  echo base_url();?>goal<?php if(isset($goalId))  echo "/update_pictures/".$goalId; ?>" class="breadcrumb  grey-text text-lighten-3">Photos</a>
-						</div>
-					</nav>
-				</div>
+		<div class="row">
+			<div class="col s12 center">
+				<nav>
+					<div class="nav-wrapper accent ">
+						<a href="<?php  echo base_url();?>goal<?php if(isset($goalId))  echo "/update_goal/".$goalId; ?>" class="breadcrumb  white-text "><b>Details</b></a>
+						<a href="<?php  echo base_url();?>goal<?php if(isset($goalId))  echo "/update_milestones/".$goalId; ?>" class="breadcrumb  grey-text text-lighten-3">Milestones</a>
+						<a href="<?php  echo base_url();?>goal<?php if(isset($goalId))  echo "/update_pictures/".$goalId; ?>" class="breadcrumb  grey-text text-lighten-3">Photos</a>
+					</div>
+				</nav>
 			</div>
+		</div>
 		
 		<h6 class="header center col s12 secondary-text"> These are the basic information fields that you must fill to create your goal.  </h6>
       
@@ -25,8 +25,8 @@
 			<form  id="form1" method="post" class="col s8 offset-s2 m6 offset-m3 l4 offset-l4" action="<?php echo base_url(); if(isset($goal)) echo "goal/save_goal/".$goalId ;else echo "goal/receiveDataNewGoal";?>" enctype="multipart/form-data">
 				<div class="row center">
 					<?php 
-						if (isset($_SESSION['error-goal']))
-							echo "Error: ".$_SESSION['error-goal']['error']; 
+					if (isset($_SESSION['error-goal']))
+						echo "Error: ".$_SESSION['error-goal']['error']; 
 					?>
 				</div>
 				<div class= "row">
@@ -54,8 +54,7 @@
 					<?php $this->load->helper('date');?>
 					<div id="date-picker" class="section scrollspy secondary-text col s12">
 						<label for="goal_startDate" class ="dark-primary-text">Start Date</label>
-						<input name="start_date" value="<?php if(isset($goal)) echo  date("d F, Y",strtotime($goal['startDate']));else echo mdate("%d %F, %Y",time()); ?>" type="date" class="datepicker" id="goal_startDate">
-						
+						<input name="start_date" value="<?php if(isset($goal)) echo  date("d F, Y",strtotime($goal['startDate']));else echo mdate("%d %F, %Y",time()); ?>" type="date" class="datepicker" id="goal_startDate">	
 					</div>
 			  
 					<div id="date-picker" class="section scrollspy secondary-text col s12">
@@ -72,9 +71,7 @@
 						<input name="is_public" type="checkbox" id="is_public" <?php if (isset($goal)&&$goal['isPublic']==1) echo "checked"; else echo "unchecked";?> />
 						<label for="is_public">Public</label>
 					</div>
-					
 				</div>
-				
 				<div class="row ">
 					<div class="col s12 ">
 						<div id="date-picker" class="section scrollspy secondary-text">
@@ -83,20 +80,15 @@
 						</div>
 					</div>
 				</div>
-				
-				
-				
-				
-      
 			</form>
 				
-				<div class="row">
-					<input type="submit" form="form1" id="create-button" class="btn-main accent waves-effect waves-light offset-s3 offset-m3 offset-l3 col s6 m6 l6 " value="Save Goal" />
-				</div>
-				<div class="row">
-					<a href="<?php  echo base_url();?>goal<?php if(isset($goalId))  echo "/update_milestones/".$goalId; ?>" form="form1" id="next-button" class="btn-main primary-dark waves-effect waves-light offset-s3 offset-m3 offset-l3 col s6 m6 l6 ">Next Step</a>
-				</div>
-				</div>
+			<div class="row">
+				<button type="submit" form="form1" id="create-button" class="btn-main accent waves-effect waves-light offset-s3 offset-m3 offset-l3 col s6 m6 l6">Save Goal</button>
+			</div>
+			<div class="row">
+				<a href="<?php  echo base_url();?>goal<?php if(isset($goalId))  echo "/update_milestones/".$goalId; ?>" form="form1" id="next-button" class="btn-main primary-dark waves-effect waves-light offset-s3 offset-m3 offset-l3 col s6 m6 l6 ">Next Step</a>
+			</div>
+		</div>
 			
     </div>
 </div>

@@ -30,7 +30,7 @@
         <div class="row ">
           <div class="col center s12 ">
             <a href="#!" class="modal-action modal-close waves-effect waves-light btn grey" method="post">Cancel</a>
-            <input type="submit" form="changePictureForm" class="modal-action modal-close waves-effect waves-green btn primary-dark" value="Save">		
+            <button type="submit" form="changePictureForm" class="modal-action modal-close waves-effect waves-green btn primary-dark">Save</button>		
           </div>
         </div>
         

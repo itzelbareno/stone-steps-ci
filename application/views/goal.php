@@ -221,7 +221,7 @@
 						<div class="row ">
 							<div class="col center s12 ">
 								<a href="<?php  echo base_url();?>goal/delete_milestone2/<?php echo $listMilestones[$i]['id']; ?>" class=" modal-action modal-close waves-effect waves-light btn grey" method="post">Delete</a>
-								<input type="submit" class=" modal-action modal-close waves-effect waves-green btn primary-dark" value="Save">		
+								<button type="submit" class="modal-action modal-close waves-effect waves-green btn primary-dark">Save</button>		
 							</div>
 						</div>
 					</div>

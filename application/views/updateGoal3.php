@@ -50,7 +50,7 @@
 
 			<div class="row">
 				<div class="col s12 m4 offset-m4">
-					<input type="submit" form="form1" id="create-button" class="btn-main dark-primary waves-effect waves-light offset-s3 offset-m3 offset-l3 col s6 m6 l6 " value="Upload" />
+					<button type="submit" form="form1" id="create-button" class="btn-main dark-primary waves-effect waves-light offset-s3 offset-m3 offset-l3 col s6 m6 l6">Upload</button>
 				</div>
 			</div>
 			
@@ -78,7 +78,7 @@
 							</div>	
 
 							<div class="col center s6 ">
-								<input type="submit" form="formSave<?php echo $i; ?>" name="save" class="btn-main dark-primary modal-action modal-close waves-effect waves-green  col s6 m6 l6 " value="Save" />	
+								<button type="submit" form="formSave<?php echo $i; ?>" name="save" class="btn-main dark-primary modal-action modal-close waves-effect waves-green  col s6 m6 l6">Save</button>	
 							</div>
 						</div>
 					</div>
