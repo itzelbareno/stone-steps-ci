@@ -99,16 +99,18 @@
               <!-- List of Goals -->
               <?php
               if(isset($listGoals)){
-                for($i=0; isset($listGoals) && $i<sizeof($listGoals);$i++){ ?>                
-                  <a href="<?php echo base_url(); ?>goal/view/<?php echo $id; ?>/<?php echo $listGoals[$i]['id']; ?>" class="collection-item waves-effect waves-light modal-trigger data-target=modal1">
-                    <div class="col s9">
-                      <span class="text"><?php echo $listGoals[$i]['title']; ?></span>
-                    </div>
-                    <div class="col s3">
-                      <span class="badge <?php if($listGoals[$i]['statusId']==2) echo 'grey-text'; else echo 'accent-text';  ?>"><?php echo $listGoals[$i]['statusName']; ?></span>                 
-                    </div>
-                  </a>
-                <?php 
+                for($i=0; isset($listGoals) && $i<sizeof($listGoals);$i++){ 
+                    if( ($_SESSION['user']['id'] != $id && $listGoals[$i]['isPublic']) || $_SESSION['user']['id'] == $id) {?>                
+                    <a href="<?php echo base_url(); ?>goal/view/<?php echo $id; ?>/<?php echo $listGoals[$i]['id']; ?>" class="collection-item waves-effect waves-light modal-trigger data-target=modal1">
+                      <div class="col s9">
+                        <span class="text"><?php echo $listGoals[$i]['title']; ?></span>
+                      </div>
+                      <div class="col s3">
+                        <span class="badge <?php if($listGoals[$i]['statusId']==2) echo 'grey-text'; else echo 'accent-text';  ?>"><?php echo $listGoals[$i]['statusName']; ?></span>                 
+                      </div>
+                    </a>
+                  <?php
+                  } 
                 }
               } 
               ?>   

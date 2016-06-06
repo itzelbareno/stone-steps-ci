@@ -50,7 +50,11 @@
 
 			<div class="row">
 				<div class="col s12 m4 offset-m4">
-					<button type="submit" form="form1" id="create-button" class="btn-main dark-primary waves-effect waves-light offset-s3 offset-m3 offset-l3 col s6 m6 l6">Upload</button>
+					<button type="submit" form="form1" id="create-button" class="btn-main dark-primary waves-effect waves-light offset-s3 offset-m3 offset-l3 col s6 m6 l6">Upload</button><br><br>	
+					<a href="<?php echo base_url(); ?>goal<?php if(isset($goalId)) echo "/view/".$_SESSION["user"]["id"]."/".$goalId; ?>" id="create-button" class="btn-main grey waves-effect waves-light offset-s3 col s6">Back to goal</a>
+				</div>
+				<div class="row">
+					
 				</div>
 			</div>
 			
