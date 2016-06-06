@@ -39,9 +39,9 @@
 										<span class="box-title">
 											<a href="<?php echo base_url(); ?>user/user_profile/<?php echo $nf_following[$i]['userId']; ?>"><?php echo $nf_following[$i]['userName']; ?></a> created a goal.<br>
 										</span>
-										<span class="box-time">
-											<?php echo $nf_following[$i]['date']; ?>
-										</span>
+										<!--<span class="box-time">
+											<?php// echo $nf_following[$i]['date']; ?>
+										</span>-->
 									</div>
 								</div>
 
@@ -59,7 +59,7 @@
 									<div class="col s12 center align">
 										<span class="box-content">
 											<b>Goal title:</b> <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $nf_following[$i]['userId']; ?>/<?php echo $nf_following[$i]['goalId']; ?>"><?php echo $nf_following[$i]['goalTitle']; ?></a><br>
-											<b>Deadline:</b> <?php echo $nf_following[$i]['goalDeadline']; ?><br>
+											<b>Deadline:</b> <?php echo date("d F, Y",strtotime($nf_following[$i]['goalDeadline'])); ?><br>
 											<b>Status:</b> <?php echo ucwords($nf_following[$i]['goalStatus']); ?>
 										</span>
 									</div>
@@ -81,9 +81,9 @@
 												<span class="box-title">
 													<a href="<?php echo base_url(); ?>user/user_profile/<?php echo $nf_following[$i]['userId']; ?>"><?php echo $nf_following[$i]['userName']; ?></a> created a milestone.<br>
 												</span>
-												<span class="box-time">
-													<?php echo $nf_following[$i]['date']; ?>
-												</span>
+												<!--<span class="box-time">
+													<?//php echo $nf_following[$i]['date']; ?>
+												</span>-->
 											</div>
 									</div>
 
@@ -92,7 +92,7 @@
 												<span class="box-content">
 													<b>Milestone title:</b> <?php echo $nf_following[$i]['milestoneTitle']; ?><br>
 													<b>Goal title:</b> <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $nf_following[$i]['userId']; ?>/<?php echo $nf_following[$i]['goalId']; ?>"><?php echo $nf_following[$i]['goalTitle']; ?></a><br>
-													<b>Goal deadline:</b> <?php echo $nf_following[$i]['goalDeadline']; ?><br>
+													<b>Goal deadline:</b> <?php echo date("d F, Y",strtotime($nf_following[$i]['goalDeadline'])); ?><br>
 													<b>Goal status:</b> <?php echo ucwords($nf_following[$i]['goalStatus']); ?>
 												</span>
 											</div>
@@ -114,9 +114,9 @@
 												<span class="box-title">
 													<a href="<?php echo base_url(); ?>user/user_profile/<?php echo $nf_following[$i]['userId']; ?>"><?php echo $nf_following[$i]['userName']; ?></a> updated a goal status.<br>
 												</span>
-												<span class="box-time">
-													<?php echo $nf_following[$i]['date']; ?>
-												</span>
+												<!--<span class="box-time">
+													<?//php echo $nf_following[$i]['date']; ?>
+												</span>-->
 											</div>
 									</div>
 
@@ -134,7 +134,7 @@
 											<div class="col s12 center align">
 												<span class="box-content">
 													<b>Goal title:</b> <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $nf_following[$i]['userId']; ?>/<?php echo $nf_following[$i]['goalId']; ?>"><?php echo $nf_following[$i]['goalTitle']; ?></a><br>
-													<b>Deadline:</b> <?php echo $nf_following[$i]['goalDeadline']; ?><br>
+													<b>Deadline:</b> <?php echo date("d F, Y",strtotime($nf_following[$i]['goalDeadline'])); ?><br>
 													<b>Status:</b> <?php echo ucwords($nf_following[$i]['goalStatus']); ?>
 												</span>
 											</div>
@@ -156,9 +156,9 @@
 												<span class="box-title">
 													<a href="<?php echo base_url(); ?>user/user_profile/<?php echo $nf_following[$i]['userId']; ?>"><?php echo $nf_following[$i]['userName']; ?></a> updated a milestone status.<br>
 												</span>
-												<span class="box-time">
-													<?php echo $nf_following[$i]['date']; ?>
-												</span>
+												<!--<span class="box-time">
+													<?//php echo $nf_following[$i]['date']; ?>
+												</span>-->
 											</div>
 									</div>
 										<div class="row valign-wrapper">
@@ -166,7 +166,7 @@
 												<span class="box-content">
 													<b>Milestone title:</b> <?php echo $nf_following[$i]['milestoneTitle']; ?><br>
 													<b>Goal title:</b> <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $nf_following[$i]['userId']; ?>/<?php echo $nf_following[$i]['goalId']; ?>"><?php echo $nf_following[$i]['goalTitle']; ?></a><br>
-													<b>Goal deadline:</b> <?php echo $nf_following[$i]['goalDeadline']; ?><br>
+													<b>Goal deadline:</b> <?php echo date("d F, Y",strtotime($nf_following[$i]['goalDeadline'])); ?><br>
 													<b>Milestone status:</b> <?php echo ucwords($nf_following[$i]['milestoneStatus']); ?>
 												</span>
 											</div>
@@ -187,16 +187,16 @@
 												<span class="box-title">
 													<a href="<?php echo base_url(); ?>user/user_profile/<?php echo $nf_following[$i]['userId']; ?>"><?php echo $nf_following[$i]['userName']; ?></a> updated a milestone status.<br>
 												</span>
-												<span class="box-time">
-													<?php echo $nf_following[$i]['date']; ?>
-												</span>
+												<!--<span class="box-time">
+													<?//php echo $nf_following[$i]['date']; ?>
+												</span>-->
 											</div>
 									</div>
 									<div class="row valign-wrapper">
 											<div class="col s12 center align">
 												<span class="box-content">
 													<b>Goal title:</b> <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $nf_following[$i]['userId']; ?>/<?php echo $nf_following[$i]['goalId']; ?>"><?php echo $nf_following[$i]['goalTitle']; ?></a><br>
-													<b>Goal deadline:</b> <?php echo $nf_following[$i]['goalDeadline']; ?><br>
+													<b>Goal deadline:</b> <?php echo date("d F, Y",strtotime($nf_following[$i]['goalDeadline'])); ?><br>
 												</span>
 											</div>
 										</div>
@@ -221,9 +221,9 @@
 												<span class="box-title">
 													<a href="<?php echo base_url(); ?>user/user_profile/<?php echo $nf_following[$i]['userId']; ?>"><?php echo $nf_following[$i]['userName']; ?></a> started following someone.<br>
 												</span>
-												<span class="box-time">
-													<?php echo $nf_following[$i]['date']; ?>
-												</span>
+												<!--<span class="box-time">
+													<?//php echo $nf_following[$i]['date']; ?>
+												</span>-->
 											</div>
 									</div>
 
@@ -278,9 +278,9 @@
 												<span class="box-title">
 													<a href="<?php echo base_url(); ?>user/user_profile/<?php echo $nf_category[$j][$i]['userId']; ?>"><?php echo $nf_category[$j][$i]['userName']; ?></a> created a goal.<br>
 												</span>
-												<span class="box-time">
-													<?php echo $nf_category[$j][$i]['date']; ?>
-												</span>
+												<!--<span class="box-time">
+													<?//php echo $nf_category[$j][$i]['date']; ?>
+												</span>-->
 											</div>
 									</div>
 
@@ -298,7 +298,7 @@
 											<div class="col s12 center align">
 												<span class="box-content">
 													<b>Goal title:</b> <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $nf_category[$j][$i]['userId']; ?>/<?php echo $nf_category[$j][$i]['goalId']; ?>"><?php echo $nf_category[$j][$i]['goalTitle']; ?></a><br>
-													<b>Deadline:</b> <?php echo $nf_category[$j][$i]['goalDeadline']; ?><br>
+													<b>Deadline:</b> <?php echo date("d F, Y",strtotime($nf_category[$j][$i]['goalDeadline'])); ?><br>
 													<b>Status:</b> <?php echo ucwords($nf_category[$j][$i]['goalStatus']); ?>
 												</span>
 											</div>
@@ -322,9 +322,9 @@
 													<span class="box-title">
 														<a href="<?php echo base_url(); ?>user/user_profile/<?php echo $nf_category[$j][$i]['userId']; ?>"><?php echo $nf_category[$j][$i]['userName']; ?></a> created a goal.<br>
 													</span>
-													<span class="box-time">
-														<?php echo $nf_category[$j][$i]['date']; ?>
-													</span>
+													<!--<span class="box-time">
+														<?//php echo $nf_category[$j][$i]['date']; ?>
+													</span>-->
 												</div>
 										</div>
 
@@ -333,7 +333,7 @@
 													<span class="box-content">
 														<b>Milestone title:</b> <?php echo $nf_category[$j][$i]['milestoneTitle']; ?><br>
 														<b>Goal title:</b> <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $nf_category[$j][$i]['userId']; ?>/<?php echo $nf_category[$j][$i]['goalId']; ?>"><?php echo $nf_category[$j][$i]['goalTitle']; ?></a><br>
-														<b>Goal deadline:</b> <?php echo $nf_category[$j][$i]['goalDeadline']; ?><br>
+														<b>Goal deadline:</b> <?php echo date("d F, Y",strtotime($nf_category[$j][$i]['goalDeadline'])); ?><br>
 														<b>Goal status:</b> <?php echo ucwords($nf_category[$j][$i]['goalStatus']); ?>
 													</span>
 												</div>
@@ -355,9 +355,9 @@
 													<span class="box-title">
 														<a href="<?php echo base_url(); ?>user/user_profile/<?php echo $nf_category[$j][$i]['userId']; ?>"><?php echo $nf_category[$j][$i]['userName']; ?></a> updated a goal status.<br>
 													</span>
-													<span class="box-time">
-														<?php echo $nf_category[$j][$i]['date']; ?>
-													</span>
+													<!--<span class="box-time">
+														<?php// echo $nf_category[$j][$i]['date']; ?>
+													</span>-->
 												</div>
 										</div>
 
@@ -375,7 +375,7 @@
 												<div class="col s12 center align">
 													<span class="box-content">
 														<b>Goal title:</b> <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $nf_category[$j][$i]['userId']; ?>/<?php echo $nf_category[$j][$i]['goalId']; ?>"><?php echo $nf_category[$j][$i]['goalTitle']; ?></a><br>
-														<b>Deadline:</b> <?php echo $nf_category[$j][$i]['goalDeadline']; ?><br>
+														<b>Deadline:</b> <?php echo date("d F, Y",strtotime($nf_category[$j][$i]['goalDeadline'])); ?><br>
 														<b>Status:</b> <?php echo ucwords($nf_category[$j][$i]['goalStatus']); ?>
 													</span>
 												</div>
@@ -397,9 +397,9 @@
 													<span class="box-title">
 														<a href="<?php echo base_url(); ?>user/user_profile/<?php echo $nf_category[$j][$i]['userId']; ?>"><?php echo $nf_category[$j][$i]['userName']; ?></a> updated a milestone status.<br>
 													</span>
-													<span class="box-time">
-														<?php echo $nf_category[$j][$i]['date']; ?>
-													</span>
+													<!--<span class="box-time">
+														<?//php echo $nf_category[$j][$i]['date']; ?>
+													</span>-->
 												</div>
 										</div>
 											<div class="row valign-wrapper">
@@ -407,7 +407,7 @@
 													<span class="box-content">
 														<b>Milestone title:</b> <?php echo $nf_category[$j][$i]['milestoneTitle']; ?><br>
 														<b>Goal title:</b> <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $nf_category[$j][$i]['userId']; ?>/<?php echo $nf_category[$j][$i]['goalId']; ?>"><?php echo $nf_category[$j][$i]['goalTitle']; ?></a><br>
-														<b>Goal deadline:</b> <?php echo $nf_category[$j][$i]['goalDeadline']; ?><br>
+														<b>Goal deadline:</b> <?php echo date("d F, Y",strtotime($nf_category[$j][$i]['goalDeadline'])); ?><br>
 														<b>Milestone status:</b> <?php echo ucwords($nf_category[$j][$i]['milestoneStatus']); ?>
 													</span>
 												</div>
@@ -428,16 +428,16 @@
 													<span class="box-title">
 														<a href="<?php echo base_url(); ?>user/user_profile/<?php echo $nf_category[$j][$i]['userId']; ?>"><?php echo $nf_category[$j][$i]['userName']; ?></a> updated a milestone status.<br>
 													</span>
-													<span class="box-time">
-														<?php echo $nf_category[$j][$i]['date']; ?>
-													</span>
+													<!--<span class="box-time">
+														<?//php echo $nf_category[$j][$i]['date']; ?>
+													</span>-->
 												</div>
 										</div>
 										<div class="row valign-wrapper">
 												<div class="col s12 center align">
 													<span class="box-content">
 														<b>Goal title:</b> <a class="dark-primary-text" href="<?php echo base_url(); ?>goal/view/<?php echo $nf_category[$j][$i]['userId']; ?>/<?php echo $nf_category[$j][$i]['goalId']; ?>"><?php echo $nf_category[$j][$i]['goalTitle']; ?></a><br>
-														<b>Goal deadline:</b> <?php echo $nf_category[$j][$i]['goalDeadline']; ?><br>
+														<b>Goal deadline:</b> <?php echo date("d F, Y",strtotime($nf_category[$j][$i]['goalDeadline'])); ?><br>
 													</span>
 												</div>
 											</div>
